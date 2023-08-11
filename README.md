@@ -1,3 +1,6 @@
 # Gym Keeper
 
-### App allowing you to track your gym progress
+### Tracking fitness progress the easy way
+
+---
+Tools: Java 20, Spring Boot, Hibernate, Groovy, Spock, Gson
