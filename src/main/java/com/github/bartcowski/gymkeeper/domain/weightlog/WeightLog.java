@@ -4,6 +4,7 @@ import com.github.bartcowski.gymkeeper.domain.user.UserId;
 import lombok.Value;
 
 import java.time.LocalDate;
+import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.List;
 
@@ -42,7 +43,35 @@ public class WeightLog {
     }
 
     public List<WeightLogPeriod> convertToPeriods(int periodLengthInDays) {
-        return null;
+        List<WeightLogPeriod> periods = new ArrayList<>();
+        List<WeightLogEntry> sortedEntries = entries.stream()
+                .sorted(Comparator.comparing(WeightLogEntry::date))
+                .toList();
+
+        LocalDate lastDayOfCurrentPeriod = startDate;
+
+        lastDayOfCurrentPeriod = lastDayOfCurrentPeriod.plusDays(periodLengthInDays - 1);
+        int firstIndexOfNextSublist = 0;
+        for (int i = 0; i < sortedEntries.size(); ++i) {
+            if (sortedEntries.get(i).date().equals(lastDayOfCurrentPeriod)) {
+                WeightLogPeriod period = new WeightLogPeriod(
+                        sortedEntries.subList(firstIndexOfNextSublist, i + 1),
+                        lastDayOfCurrentPeriod.minusDays(periodLengthInDays - 1),
+                        lastDayOfCurrentPeriod);
+                periods.add(period);
+                lastDayOfCurrentPeriod = lastDayOfCurrentPeriod.plusDays(periodLengthInDays);
+                firstIndexOfNextSublist = i + 1;
+            } else if (sortedEntries.get(i).date().isAfter(lastDayOfCurrentPeriod)) {
+                WeightLogPeriod period = new WeightLogPeriod(
+                        sortedEntries.subList(firstIndexOfNextSublist, i),
+                        lastDayOfCurrentPeriod.minusDays(periodLengthInDays - 1),
+                        lastDayOfCurrentPeriod);
+                periods.add(period);
+                lastDayOfCurrentPeriod = lastDayOfCurrentPeriod.plusDays(periodLengthInDays);
+                firstIndexOfNextSublist = i;
+            }
+        }
+        return periods;
     }
 
     private boolean entryForGivenDayAlreadyExists(WeightLogEntry entry) {
