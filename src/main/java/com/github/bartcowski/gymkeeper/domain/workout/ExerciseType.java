@@ -1,0 +1,49 @@
+package com.github.bartcowski.gymkeeper.domain.workout;
+
+public enum ExerciseType {
+
+    //chest
+    BARBELL_BENCH_PRESS,
+    BARBELL_BENCH_PRESS_BIACROMIAL,
+    DUMBBELL_BENCH_PRESS,
+    DUMBBELL_CHEST_FLY,
+
+    //shoulders
+    MILITARY_PRESS,
+    DUMBBELL_SEATED_PRESS,
+    DUMBBELL_LATERAL_RAISE,
+    CABLE_LATERAL_RAISE,
+
+    //back
+    BARBELL_BENT_OVER_ROW,
+    LAT_PULL_DOWN,
+    SEATED_CABLE_ROW,
+
+    //biceps
+    BARBELL_CURLS,
+    EZ_BAR_CURLS,
+    HAMMER_CURLS,
+    DUMBBELL_CURLS,
+    INCLINE_DUMBBELL_CURLS,
+
+    //triceps
+    DUMBBELL_TRICEPS_EXTENSIONS,
+    CABLE_TRICEPS_EXTENSIONS,
+    DUMBBELL_SKULL_CRUSHERS,
+    BARBELL_SKULL_CRUSHERS,
+    TRICEPS_ROPE_PUSHDOWN,
+
+    //lower body
+    SQUAT,
+    DEADLIFT,
+    HEX_BAR_DEADLIFT,
+    HIP_THRUST,
+
+    //calisthenics
+    PULL_UP,
+    CHIN_UP,
+    AUSTRALIAN_PULL_UP,
+    DIP,
+    PUSH_UP
+
+}

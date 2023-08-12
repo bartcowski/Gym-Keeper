@@ -12,4 +12,8 @@ public class Workout {
 
     List<Exercise> exercises;
 
+    boolean isDeload;
+
+    String comment;
+
 }
