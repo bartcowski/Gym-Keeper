@@ -11,9 +11,9 @@ class WeightLogTest extends Specification {
     def "should return weight log end date which is the date of te last entry in it"() {
         given:
         def weightLog = createWeightLogWithEntries([
-                new WeightLogEntry(new UserWeight(86.4), LocalDate.of(2023, 1, 9)),
-                new WeightLogEntry(new UserWeight(86.7), LocalDate.of(2023, 1, 2)),
-                new WeightLogEntry(new UserWeight(86.6), LocalDate.of(2023, 1, 4))
+                new WeightLogEntry(new WeightLogEntryId(1), new UserWeight(86.4), LocalDate.of(2023, 1, 9)),
+                new WeightLogEntry(new WeightLogEntryId(2), new UserWeight(86.7), LocalDate.of(2023, 1, 2)),
+                new WeightLogEntry(new WeightLogEntryId(3), new UserWeight(86.6), LocalDate.of(2023, 1, 4))
         ])
 
         when:
@@ -26,7 +26,7 @@ class WeightLogTest extends Specification {
     def "should properly add new entry"() {
         given:
         def weightLog = createWeightLogWithEntries([])
-        def newLogEntry = new WeightLogEntry(new UserWeight(86.7), LocalDate.of(2023, 1, 2))
+        def newLogEntry = new WeightLogEntry(new WeightLogEntryId(1), new UserWeight(86.7), LocalDate.of(2023, 1, 2))
 
         when:
         weightLog.addNewEntry(newLogEntry)
@@ -38,9 +38,9 @@ class WeightLogTest extends Specification {
 
     def "should not add new entry and throw exception when #reason"() {
         given:
-        def existingLogEntry = new WeightLogEntry(new UserWeight(80.1), LocalDate.of(2023, 1, 2))
+        def existingLogEntry = new WeightLogEntry(new WeightLogEntryId(1), new UserWeight(80.1), LocalDate.of(2023, 1, 2))
         def weightLog = createWeightLogWithEntries([existingLogEntry])
-        def newLogEntry = new WeightLogEntry(new UserWeight(86.7), newLogEntryDate)
+        def newLogEntry = new WeightLogEntry(new WeightLogEntryId(2), new UserWeight(86.7), newLogEntryDate)
 
         when:
         weightLog.addNewEntry(newLogEntry)
