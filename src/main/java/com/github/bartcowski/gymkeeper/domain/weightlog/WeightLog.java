@@ -21,6 +21,23 @@ public class WeightLog {
 
     List<WeightLogEntry> entries;
 
+    public WeightLog(WeightLogId id, UserId userId, WeightLogName name, LocalDate startDate, List<WeightLogEntry> entries) {
+        this.id = id;
+        this.userId = userId;
+        this.name = name;
+        this.startDate = startDate;
+        this.entries = new ArrayList<>();
+        entries.forEach(this::addNewEntry); //TODO: more efficient way to validate all entries on creation?
+    }
+
+    public WeightLog(WeightLogId id, UserId userId, WeightLogName name, LocalDate startDate) {
+        this.id = id;
+        this.userId = userId;
+        this.name = name;
+        this.startDate = startDate;
+        this.entries = new ArrayList<>();
+    }
+
     public LocalDate getEndDate() {
         return entries.stream()
                 .max(Comparator.comparing(WeightLogEntry::date))
