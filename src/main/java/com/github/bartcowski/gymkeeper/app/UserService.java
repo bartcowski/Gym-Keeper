@@ -1,11 +1,9 @@
 package com.github.bartcowski.gymkeeper.app;
 
-import com.github.bartcowski.gymkeeper.domain.user.User;
-import com.github.bartcowski.gymkeeper.domain.user.UserId;
-import com.github.bartcowski.gymkeeper.domain.user.UserWeight;
-import com.github.bartcowski.gymkeeper.domain.user.Username;
+import com.github.bartcowski.gymkeeper.domain.user.*;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 import java.util.Optional;
@@ -28,14 +26,15 @@ public class UserService {
         return userRepository.findUserByName(username);
     }
 
-    public void addUser(User user) {
-        userRepository.addUser(user);
+    public void addUser(CreateUserCommand createUserCommand) {
+        userRepository.addUser(createUserCommand);
     }
 
     public void deleteUser(UserId userId) {
         userRepository.deleteUser(userId);
     }
 
+    @Transactional
     public void updateUserWeight(UserId userId, UserWeight weight) {
         User user = userRepository.findUserById(userId)
                 .map(u -> u.withUpdatedWeight(weight))

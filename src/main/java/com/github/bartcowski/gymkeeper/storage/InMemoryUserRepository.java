@@ -1,6 +1,7 @@
 package com.github.bartcowski.gymkeeper.storage;
 
 import com.github.bartcowski.gymkeeper.app.UserRepository;
+import com.github.bartcowski.gymkeeper.domain.user.CreateUserCommand;
 import com.github.bartcowski.gymkeeper.domain.user.User;
 import com.github.bartcowski.gymkeeper.domain.user.UserId;
 import com.github.bartcowski.gymkeeper.domain.user.Username;
@@ -10,6 +11,8 @@ import java.util.*;
 
 @Service
 public class InMemoryUserRepository implements UserRepository {
+
+    private static long userIdCounter = 0;
 
     private final Map<UserId, User> usersMap = new HashMap<>();
 
@@ -31,8 +34,16 @@ public class InMemoryUserRepository implements UserRepository {
     }
 
     @Override
-    public void addUser(User user) {
-        usersMap.put(user.getId(), user);
+    public void addUser(CreateUserCommand command) {
+        User newUser = new User(
+                new UserId(userIdCounter),
+                command.username(),
+                command.gender(),
+                command.age(),
+                command.weight(),
+                command.height());
+        usersMap.put(newUser.getId(), newUser);
+        userIdCounter++;
     }
 
     @Override

@@ -1,5 +1,6 @@
 package com.github.bartcowski.gymkeeper.app;
 
+import com.github.bartcowski.gymkeeper.domain.user.CreateUserCommand;
 import com.github.bartcowski.gymkeeper.domain.user.User;
 import com.github.bartcowski.gymkeeper.domain.user.UserId;
 import com.github.bartcowski.gymkeeper.domain.user.Username;
@@ -15,7 +16,7 @@ public interface UserRepository {
 
     Optional<User> findUserByName(Username username);
 
-    void addUser(User user);
+    void addUser(CreateUserCommand createUserCommand);
 
     void deleteUser(UserId userId);
 
