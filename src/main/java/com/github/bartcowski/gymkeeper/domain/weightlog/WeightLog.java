@@ -7,6 +7,7 @@ import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.List;
+import java.util.Optional;
 
 @Value
 public class WeightLog {
@@ -26,8 +27,8 @@ public class WeightLog {
         this.userId = userId;
         this.name = name;
         this.startDate = startDate;
-        this.entries = new ArrayList<>();
-        entries.forEach(this::addNewEntry); //TODO: more efficient way to validate all entries on creation?
+        this.entries = entries;
+        //entries.forEach(this::addNewEntry); //TODO: validate entries on creation?
     }
 
     public WeightLog(WeightLogId id, UserId userId, WeightLogName name, LocalDate startDate) {
@@ -49,14 +50,28 @@ public class WeightLog {
         return new WeightLog(id, userId, newName, startDate, entries);
     }
 
-    public void addNewEntry(WeightLogEntry newEntry) {
-        if (entryForGivenDayAlreadyExists(newEntry)) {
+    //TODO: either add ID managing logic or (preferably) change newEntry into EntryCreateCommand
+    public void addNewEntry(CreateWeightLogEntryCommand command) {
+        if (entryForGivenDayAlreadyExists(command.date())) {
             throw new IllegalStateException("Weight log entry for given day already exists!");
         }
-        if (newEntryDateIsBeforeWeightLogStartDate(newEntry)) {
+        if (newEntryDateIsBeforeWeightLogStartDate(command.date())) {
             throw new IllegalStateException("New weight log entry cannot be before weight log's start date!");
         }
-        entries.add(newEntry);
+
+        WeightLogEntryId newEntryId = createNewEntryId();
+        WeightLogEntry newWeightLogEntry = new WeightLogEntry(newEntryId, command.weight(), command.date(), command.comment());
+        entries.add(newWeightLogEntry);
+    }
+
+    public void deleteEntry(WeightLogEntryId weightLogEntryId) {
+        Optional<WeightLogEntry> entryToDelete = entries.stream()
+                .filter(entry -> entry.id().equals(weightLogEntryId))
+                .findFirst();
+        if (entryToDelete.isEmpty()) {
+            return;
+        }
+        entries.remove(entryToDelete.get());
     }
 
     public List<WeightLogPeriod> convertToPeriods(int periodLengthInDays) {
@@ -91,12 +106,19 @@ public class WeightLog {
         return periods;
     }
 
-    private boolean entryForGivenDayAlreadyExists(WeightLogEntry entry) {
-        return entries.stream().anyMatch(existingEntry -> existingEntry.date().equals(entry.date()));
+    private WeightLogEntryId createNewEntryId() {
+        return entries.stream()
+                .max(Comparator.comparing(e -> e.id().id()))
+                .map(e -> new WeightLogEntryId(e.id().id() + 1))
+                .orElseGet(() -> new WeightLogEntryId(0));
     }
 
-    private boolean newEntryDateIsBeforeWeightLogStartDate(WeightLogEntry entry) {
-        return entry.date().isBefore(startDate);
+    private boolean entryForGivenDayAlreadyExists(LocalDate date) {
+        return entries.stream().anyMatch(existingEntry -> existingEntry.date().equals(date));
+    }
+
+    private boolean newEntryDateIsBeforeWeightLogStartDate(LocalDate date) {
+        return date.isBefore(startDate);
     }
 
 }

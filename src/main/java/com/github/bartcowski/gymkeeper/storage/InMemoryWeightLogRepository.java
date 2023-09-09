@@ -2,6 +2,7 @@ package com.github.bartcowski.gymkeeper.storage;
 
 import com.github.bartcowski.gymkeeper.app.WeightLogRepository;
 import com.github.bartcowski.gymkeeper.domain.user.UserId;
+import com.github.bartcowski.gymkeeper.domain.weightlog.CreateWeightLogCommand;
 import com.github.bartcowski.gymkeeper.domain.weightlog.WeightLog;
 import com.github.bartcowski.gymkeeper.domain.weightlog.WeightLogId;
 import org.springframework.stereotype.Service;
@@ -13,6 +14,8 @@ import java.util.Optional;
 
 @Service
 public class InMemoryWeightLogRepository implements WeightLogRepository {
+
+    private static long weightLogIdCounter = 0;
 
     private final Map<WeightLogId, WeightLog> weightLogsMap = new HashMap<>();
 
@@ -30,8 +33,15 @@ public class InMemoryWeightLogRepository implements WeightLogRepository {
     }
 
     @Override
-    public void addWeightLog(WeightLog weightLog) {
-        weightLogsMap.put(weightLog.getId(), weightLog);
+    public void addWeightLog(CreateWeightLogCommand command) {
+        WeightLog newWeightLog = new WeightLog(
+                new WeightLogId(weightLogIdCounter),
+                command.userId(),
+                command.name(),
+                command.startDate()
+        );
+        weightLogsMap.put(newWeightLog.getId(), newWeightLog);
+        weightLogIdCounter++;
     }
 
     @Override

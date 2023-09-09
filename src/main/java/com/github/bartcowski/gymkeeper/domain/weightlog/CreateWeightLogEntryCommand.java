@@ -4,14 +4,14 @@ import com.github.bartcowski.gymkeeper.domain.user.UserWeight;
 
 import java.time.LocalDate;
 
-public record WeightLogEntry(
-        WeightLogEntryId id,
+public record CreateWeightLogEntryCommand(
         UserWeight weight,
         LocalDate date,
-        String comment) {
+        String comment
+) {
 
-    public WeightLogEntry(WeightLogEntryId id, UserWeight weight, LocalDate date) {
-        this(id, weight, date, "");
+    public CreateWeightLogEntryCommand(UserWeight weight, LocalDate date) {
+        this(weight, date, "");
     }
 
 }

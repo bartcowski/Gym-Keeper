@@ -1,6 +1,7 @@
 package com.github.bartcowski.gymkeeper.app;
 
 import com.github.bartcowski.gymkeeper.domain.user.UserId;
+import com.github.bartcowski.gymkeeper.domain.weightlog.CreateWeightLogCommand;
 import com.github.bartcowski.gymkeeper.domain.weightlog.WeightLog;
 import com.github.bartcowski.gymkeeper.domain.weightlog.WeightLogId;
 
@@ -13,7 +14,7 @@ public interface WeightLogRepository {
 
     Optional<WeightLog> findWeightLogById(WeightLogId weightLogId);
 
-    void addWeightLog(WeightLog weightLog);
+    void addWeightLog(CreateWeightLogCommand command);
 
     void deleteWeightLog(WeightLogId weightLogId);
 

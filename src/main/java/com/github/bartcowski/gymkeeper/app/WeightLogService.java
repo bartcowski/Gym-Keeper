@@ -1,12 +1,10 @@
 package com.github.bartcowski.gymkeeper.app;
 
 import com.github.bartcowski.gymkeeper.domain.user.UserId;
-import com.github.bartcowski.gymkeeper.domain.weightlog.WeightLog;
-import com.github.bartcowski.gymkeeper.domain.weightlog.WeightLogEntry;
-import com.github.bartcowski.gymkeeper.domain.weightlog.WeightLogId;
-import com.github.bartcowski.gymkeeper.domain.weightlog.WeightLogPeriod;
+import com.github.bartcowski.gymkeeper.domain.weightlog.*;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 import java.util.Optional;
@@ -25,8 +23,8 @@ public class WeightLogService {
         return weightLogRepository.findWeightLogById(weightLogId);
     }
 
-    public void addWeightLog(WeightLog weightLog) {
-        weightLogRepository.addWeightLog(weightLog);
+    public void addWeightLog(CreateWeightLogCommand command) {
+        weightLogRepository.addWeightLog(command);
     }
 
     public void deleteWeightLog(WeightLogId weightLogId) {
@@ -40,11 +38,21 @@ public class WeightLogService {
         return weightLog.convertToPeriods(periodLengthInDays);
     }
 
-    public void addWeightLogEntry(WeightLogEntry weightLogEntry, WeightLogId weightLogId) {
+    @Transactional
+    public void addWeightLogEntry(CreateWeightLogEntryCommand command, WeightLogId weightLogId) {
         WeightLog weightLog = weightLogRepository.findWeightLogById(weightLogId)
                 .orElseThrow(() -> new IllegalStateException(
                         "Unable to add new weight log entry because no corresponding weight log of id: " + weightLogId.id() + " can be found"));
-        weightLog.addNewEntry(weightLogEntry);
+        weightLog.addNewEntry(command);
+        weightLogRepository.updateWeightLog(weightLog);
+    }
+
+    @Transactional
+    public void renameWeightLog(WeightLogName weightLogName, WeightLogId weightLogId) {
+        WeightLog weightLog = weightLogRepository.findWeightLogById(weightLogId)
+                .orElseThrow(() -> new IllegalStateException(
+                        "Unable to rename weight log because no weight log of id: " + weightLogId.id() + " can be found"));
+        weightLog = weightLog.renameWeightLog(weightLogName);
         weightLogRepository.updateWeightLog(weightLog);
     }
 
