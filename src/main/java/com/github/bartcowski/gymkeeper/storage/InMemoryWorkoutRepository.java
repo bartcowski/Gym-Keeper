@@ -39,8 +39,4 @@ public class InMemoryWorkoutRepository implements WorkoutRepository {
         workoutsMap.remove(workoutId);
     }
 
-    @Override
-    public void updateWorkout(Workout workout) {
-        workoutsMap.put(workout.getId(), workout);
-    }
 }

@@ -37,8 +37,7 @@ public class UserService {
     @Transactional
     public void updateUserWeight(UserId userId, UserWeight weight) {
         User user = userRepository.findUserById(userId)
-                .map(u -> u.withUpdatedWeight(weight))
                 .orElseThrow(() -> new IllegalStateException("User's weight cannot be updated because no user of id: " + userId.id() + " can be found"));
-        userRepository.updateUser(user);
+        user.updateWeight(weight);
     }
 }

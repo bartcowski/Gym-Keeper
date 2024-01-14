@@ -1,39 +1,41 @@
 package com.github.bartcowski.gymkeeper.domain.user;
 
-import lombok.Value;
+import lombok.AllArgsConstructor;
+import lombok.Getter;
 
 import java.math.BigDecimal;
 import java.math.RoundingMode;
 
-@Value
+@AllArgsConstructor
+@Getter
 public class User {
 
-    UserId id;
+    private final UserId id;
 
-    Username username;
+    private final Username username;
 
-    UserGender gender;
+    private final UserGender gender;
 
-    UserAge age;
+    private UserAge age;
 
-    UserWeight weight;
+    private UserWeight weight;
 
-    UserHeight height;
+    private UserHeight height;
 
-    public User withUpdatedWeight(UserWeight weight) {
-        return new User(id, username, gender, age, weight, height);
+    public void updateWeight(UserWeight weight) {
+        this.weight = weight;
     }
 
     public double calculateBMI() {
-        double BMI = weight.value() / (height.valueInMetres() * height.valueInMetres());
+        double BMI = weight.value() / (height.inMetres() * height.inMetres());
         return new BigDecimal(BMI).setScale(2, RoundingMode.HALF_UP).doubleValue();
     }
 
     public double calculateFFMI(BodyFatPercentage bodyFatPercentage) {
         double totalBodyFat = weight.value() * (bodyFatPercentage.value() / 100);
         double leanWeight = weight.value() - totalBodyFat;
-        double FFMI = leanWeight / (height.valueInMetres() * height.valueInMetres());
-        double normalizedFFMI = FFMI + 6.1 * (1.8 - height.valueInMetres());
+        double FFMI = leanWeight / (height.inMetres() * height.inMetres());
+        double normalizedFFMI = FFMI + 6.1 * (1.8 - height.inMetres());
         return new BigDecimal(normalizedFFMI).setScale(2, RoundingMode.HALF_UP).doubleValue();
     }
 }

@@ -44,7 +44,6 @@ public class WeightLogService {
                 .orElseThrow(() -> new IllegalStateException(
                         "Unable to add new weight log entry because no corresponding weight log of id: " + weightLogId.id() + " can be found"));
         weightLog.addNewEntry(command);
-        weightLogRepository.updateWeightLog(weightLog);
     }
 
     @Transactional
@@ -52,8 +51,7 @@ public class WeightLogService {
         WeightLog weightLog = weightLogRepository.findWeightLogById(weightLogId)
                 .orElseThrow(() -> new IllegalStateException(
                         "Unable to rename weight log because no weight log of id: " + weightLogId.id() + " can be found"));
-        weightLog = weightLog.renameWeightLog(weightLogName);
-        weightLogRepository.updateWeightLog(weightLog);
+        weightLog.renameWeightLog(weightLogName);
     }
 
 }

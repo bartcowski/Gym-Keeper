@@ -17,6 +17,4 @@ public interface WorkoutRepository {
 
     void deleteWorkout(WorkoutId workoutId);
 
-    void updateWorkout(Workout workout);
-
 }

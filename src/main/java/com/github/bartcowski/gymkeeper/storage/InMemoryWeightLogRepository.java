@@ -49,8 +49,4 @@ public class InMemoryWeightLogRepository implements WeightLogRepository {
         weightLogsMap.remove(weightLogId);
     }
 
-    @Override
-    public void updateWeightLog(WeightLog weightLog) {
-        weightLogsMap.put(weightLog.getId(), weightLog);
-    }
 }

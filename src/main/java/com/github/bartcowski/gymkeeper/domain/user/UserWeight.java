@@ -4,7 +4,7 @@ public record UserWeight(double value) {
 
     public UserWeight {
         if (value <= 0 || value > 500) {
-            throw new IllegalArgumentException("User value must be between 1 and 500 kg");
+            throw new IllegalArgumentException("User weight must be between 1-500 kg");
         }
     }
 }

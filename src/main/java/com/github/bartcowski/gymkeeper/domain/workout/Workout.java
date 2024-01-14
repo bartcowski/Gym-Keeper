@@ -1,7 +1,7 @@
 package com.github.bartcowski.gymkeeper.domain.workout;
 
 import com.github.bartcowski.gymkeeper.domain.user.UserId;
-import lombok.Value;
+import lombok.Getter;
 
 import java.time.LocalDate;
 import java.util.ArrayList;
@@ -10,20 +10,20 @@ import java.util.List;
 import java.util.Optional;
 import java.util.function.Function;
 
-@Value
+@Getter
 public class Workout {
 
-    WorkoutId id;
+    private final WorkoutId id;
 
-    UserId userId; //workout creator, loose coupling between User and Workout
+    private final UserId userId;
 
-    List<Exercise> exercises;
+    private final List<Exercise> exercises;
 
-    LocalDate date;
+    private LocalDate date;
 
-    boolean isDeload;
+    private boolean isDeload;
 
-    String comment;
+    private String comment;
 
     public Workout(WorkoutId id, UserId userId, List<Exercise> exercises, LocalDate date, boolean isDeload, String comment) {
         this.id = id;

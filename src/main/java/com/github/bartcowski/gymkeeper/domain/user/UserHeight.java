@@ -4,11 +4,11 @@ public record UserHeight(int value) {
 
     public UserHeight {
         if (value <= 0 || value > 300) {
-            throw new IllegalArgumentException("User value must be between 1 and 300 cm");
+            throw new IllegalArgumentException("User height must be between 1-300 cm");
         }
     }
 
-    public double valueInMetres() {
+    public double inMetres() {
         return value() / 100.0;
     }
 

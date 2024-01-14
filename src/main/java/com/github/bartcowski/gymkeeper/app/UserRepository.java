@@ -20,6 +20,4 @@ public interface UserRepository {
 
     void deleteUser(UserId userId);
 
-    void updateUser(User user);
-
 }

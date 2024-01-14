@@ -51,8 +51,4 @@ public class InMemoryUserRepository implements UserRepository {
         usersMap.remove(userId);
     }
 
-    @Override
-    public void updateUser(User user) {
-        usersMap.put(user.getId(), user);
-    }
 }

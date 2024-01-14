@@ -18,6 +18,4 @@ public interface WeightLogRepository {
 
     void deleteWeightLog(WeightLogId weightLogId);
 
-    void updateWeightLog(WeightLog weightLog);
-
 }

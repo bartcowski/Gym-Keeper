@@ -6,6 +6,7 @@ import com.github.bartcowski.gymkeeper.domain.workout.Workout;
 import com.github.bartcowski.gymkeeper.domain.workout.WorkoutId;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 import java.util.Optional;
@@ -32,11 +33,11 @@ public class WorkoutService {
         workoutRepository.deleteWorkout(workoutId);
     }
 
+    @Transactional
     void updateWorkoutExercises(List<Exercise> updatedExercises, WorkoutId workoutId) {
         Workout workout = workoutRepository.findWorkoutById(workoutId)
                 .orElseThrow(() -> new IllegalStateException(
                         "Unable to update workout's exercises because no workout of id: " + workoutId.id() + " can be found"));
         workout.updateExercises(updatedExercises);
-        workoutRepository.updateWorkout(workout);
     }
 }

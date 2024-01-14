@@ -1,7 +1,7 @@
 package com.github.bartcowski.gymkeeper.domain.weightlog;
 
 import com.github.bartcowski.gymkeeper.domain.user.UserId;
-import lombok.Value;
+import lombok.Getter;
 
 import java.time.LocalDate;
 import java.util.ArrayList;
@@ -9,18 +9,18 @@ import java.util.Comparator;
 import java.util.List;
 import java.util.Optional;
 
-@Value
+@Getter
 public class WeightLog {
 
-    WeightLogId id;
+    private final WeightLogId id;
 
-    UserId userId; //WeightLog creator, loose coupling between User and Workout
+    private final UserId userId;
 
-    WeightLogName name;
+    private final LocalDate startDate;
 
-    LocalDate startDate;
+    private final List<WeightLogEntry> entries;
 
-    List<WeightLogEntry> entries;
+    private WeightLogName name;
 
     public WeightLog(WeightLogId id, UserId userId, WeightLogName name, LocalDate startDate, List<WeightLogEntry> entries) {
         this.id = id;
@@ -28,7 +28,6 @@ public class WeightLog {
         this.name = name;
         this.startDate = startDate;
         this.entries = entries;
-        //entries.forEach(this::addNewEntry); //TODO: validate entries on creation?
     }
 
     public WeightLog(WeightLogId id, UserId userId, WeightLogName name, LocalDate startDate) {
@@ -46,11 +45,10 @@ public class WeightLog {
                 .orElse(startDate);
     }
 
-    public WeightLog renameWeightLog(WeightLogName newName) {
-        return new WeightLog(id, userId, newName, startDate, entries);
+    public void renameWeightLog(WeightLogName newName) {
+        this.name = newName;
     }
 
-    //TODO: either add ID managing logic or (preferably) change newEntry into EntryCreateCommand
     public void addNewEntry(CreateWeightLogEntryCommand command) {
         if (entryForGivenDayAlreadyExists(command.date())) {
             throw new IllegalStateException("Weight log entry for given day already exists!");
