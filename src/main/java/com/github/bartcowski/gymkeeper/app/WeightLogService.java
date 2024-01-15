@@ -1,5 +1,7 @@
 package com.github.bartcowski.gymkeeper.app;
 
+import com.github.bartcowski.gymkeeper.domain.event.DomainEventPublisher;
+import com.github.bartcowski.gymkeeper.domain.event.WeightLogEntryAdded;
 import com.github.bartcowski.gymkeeper.domain.user.UserId;
 import com.github.bartcowski.gymkeeper.domain.weightlog.*;
 import lombok.AllArgsConstructor;
@@ -15,6 +17,8 @@ public class WeightLogService {
 
     private final WeightLogRepository weightLogRepository;
 
+    private final DomainEventPublisher eventPublisher;
+
     public List<WeightLog> findAllUsersWeightLogs(UserId userId) {
         return weightLogRepository.findAllUsersWeightLogs(userId);
     }
@@ -23,8 +27,8 @@ public class WeightLogService {
         return weightLogRepository.findWeightLogById(weightLogId);
     }
 
-    public void addWeightLog(CreateWeightLogCommand command) {
-        weightLogRepository.addWeightLog(command);
+    public WeightLog addWeightLog(CreateWeightLogCommand command) {
+        return weightLogRepository.addWeightLog(command);
     }
 
     public void deleteWeightLog(WeightLogId weightLogId) {
@@ -43,7 +47,8 @@ public class WeightLogService {
         WeightLog weightLog = weightLogRepository.findWeightLogById(weightLogId)
                 .orElseThrow(() -> new IllegalStateException(
                         "Unable to add new weight log entry because no corresponding weight log of id: " + weightLogId.id() + " can be found"));
-        weightLog.addNewEntry(command);
+        WeightLogEntryAdded weightLogEntryAdded = weightLog.addNewEntry(command);
+        eventPublisher.publish(weightLogEntryAdded);
     }
 
     @Transactional

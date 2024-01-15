@@ -16,7 +16,7 @@ public interface UserRepository {
 
     Optional<User> findUserByName(Username username);
 
-    void addUser(CreateUserCommand command);
+    User addUser(CreateUserCommand command);
 
     void deleteUser(UserId userId);
 

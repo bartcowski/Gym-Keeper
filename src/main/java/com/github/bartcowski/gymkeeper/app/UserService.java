@@ -26,8 +26,8 @@ public class UserService {
         return userRepository.findUserByName(username);
     }
 
-    public void addUser(CreateUserCommand command) {
-        userRepository.addUser(command);
+    public User addUser(CreateUserCommand command) {
+        return userRepository.addUser(command);
     }
 
     public void deleteUser(UserId userId) {

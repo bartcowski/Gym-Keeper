@@ -14,7 +14,7 @@ public interface WeightLogRepository {
 
     Optional<WeightLog> findWeightLogById(WeightLogId weightLogId);
 
-    void addWeightLog(CreateWeightLogCommand command);
+    WeightLog addWeightLog(CreateWeightLogCommand command);
 
     void deleteWeightLog(WeightLogId weightLogId);
 

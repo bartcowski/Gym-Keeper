@@ -33,7 +33,7 @@ public class InMemoryWeightLogRepository implements WeightLogRepository {
     }
 
     @Override
-    public void addWeightLog(CreateWeightLogCommand command) {
+    public WeightLog addWeightLog(CreateWeightLogCommand command) {
         WeightLog newWeightLog = new WeightLog(
                 new WeightLogId(weightLogIdCounter),
                 command.userId(),
@@ -42,6 +42,7 @@ public class InMemoryWeightLogRepository implements WeightLogRepository {
         );
         weightLogsMap.put(newWeightLog.getId(), newWeightLog);
         weightLogIdCounter++;
+        return newWeightLog;
     }
 
     @Override

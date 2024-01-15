@@ -1,5 +1,6 @@
 package com.github.bartcowski.gymkeeper.domain.weightlog;
 
+import com.github.bartcowski.gymkeeper.domain.event.WeightLogEntryAdded;
 import com.github.bartcowski.gymkeeper.domain.user.UserId;
 import lombok.Getter;
 
@@ -49,7 +50,7 @@ public class WeightLog {
         this.name = newName;
     }
 
-    public void addNewEntry(CreateWeightLogEntryCommand command) {
+    public WeightLogEntryAdded addNewEntry(CreateWeightLogEntryCommand command) {
         if (entryForGivenDayAlreadyExists(command.date())) {
             throw new IllegalStateException("Weight log entry for given day already exists!");
         }
@@ -60,6 +61,7 @@ public class WeightLog {
         WeightLogEntryId newEntryId = createNewEntryId();
         WeightLogEntry newWeightLogEntry = new WeightLogEntry(newEntryId, command.weight(), command.date(), command.comment());
         entries.add(newWeightLogEntry);
+        return new WeightLogEntryAdded(this.userId, command.weight());
     }
 
     public void deleteEntry(WeightLogEntryId weightLogEntryId) {

@@ -34,7 +34,7 @@ public class InMemoryUserRepository implements UserRepository {
     }
 
     @Override
-    public void addUser(CreateUserCommand command) {
+    public User addUser(CreateUserCommand command) {
         User newUser = new User(
                 new UserId(userIdCounter),
                 command.username(),
@@ -44,6 +44,7 @@ public class InMemoryUserRepository implements UserRepository {
                 command.height());
         usersMap.put(newUser.getId(), newUser);
         userIdCounter++;
+        return newUser;
     }
 
     @Override
