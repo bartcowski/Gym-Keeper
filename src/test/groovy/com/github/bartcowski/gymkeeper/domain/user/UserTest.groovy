@@ -25,7 +25,7 @@ class UserTest extends Specification {
 
     def "should properly calculate FFMI"() {
         given:
-        def bodyFatPercentage = new BodyFatPercentage(20.0)
+        def bodyFatPercentage = new BodyFatPercentage(20)
 
         when:
         def FFMI = user.calculateFFMI(bodyFatPercentage)

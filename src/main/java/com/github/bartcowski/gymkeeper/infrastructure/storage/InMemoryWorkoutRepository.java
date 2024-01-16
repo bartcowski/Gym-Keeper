@@ -1,4 +1,4 @@
-package com.github.bartcowski.gymkeeper.storage;
+package com.github.bartcowski.gymkeeper.infrastructure.storage;
 
 import com.github.bartcowski.gymkeeper.app.WorkoutRepository;
 import com.github.bartcowski.gymkeeper.domain.user.UserId;

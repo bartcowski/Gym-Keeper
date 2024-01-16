@@ -32,7 +32,7 @@ public class User {
     }
 
     public double calculateFFMI(BodyFatPercentage bodyFatPercentage) {
-        double totalBodyFat = weight.value() * (bodyFatPercentage.value() / 100);
+        double totalBodyFat = weight.value() * (bodyFatPercentage.value() / 100.0);
         double leanWeight = weight.value() - totalBodyFat;
         double FFMI = leanWeight / (height.inMetres() * height.inMetres());
         double normalizedFFMI = FFMI + 6.1 * (1.8 - height.inMetres());

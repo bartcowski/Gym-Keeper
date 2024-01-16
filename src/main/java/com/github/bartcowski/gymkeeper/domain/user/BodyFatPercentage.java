@@ -1,6 +1,6 @@
 package com.github.bartcowski.gymkeeper.domain.user;
 
-public record BodyFatPercentage(double value) {
+public record BodyFatPercentage(int value) {
 
     public BodyFatPercentage {
         if (value < 0 || value > 100) {
