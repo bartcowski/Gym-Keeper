@@ -1,5 +1,6 @@
 package com.github.bartcowski.gymkeeper.domain.event;
 
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
@@ -13,10 +14,13 @@ public class DomainEventPublisher {
 
     private final List<DomainEventSubscriber> subscribers;
 
-    private final ExecutorService executorService = Executors.newFixedThreadPool(3);
+    private final ExecutorService executorService;
 
-    public DomainEventPublisher(Optional<List<DomainEventSubscriber>> potentialSubscribers) {
+    public DomainEventPublisher(
+            Optional<List<DomainEventSubscriber>> potentialSubscribers,
+            @Value("${gymkeeper.event.publisher.threadPoolSize:5}") int threadPoolSize) {
         this.subscribers = potentialSubscribers.orElseGet(ArrayList::new);
+        this.executorService = Executors.newFixedThreadPool(threadPoolSize);
     }
 
     public <T extends DomainEvent> void publish(T domainEvent) {
