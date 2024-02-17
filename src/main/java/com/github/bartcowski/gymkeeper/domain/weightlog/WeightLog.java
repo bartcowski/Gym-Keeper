@@ -75,15 +75,18 @@ public class WeightLog {
     }
 
     public List<WeightLogPeriod> convertToPeriods(int periodLengthInDays) {
+        if (periodLengthInDays <= 1) {
+            throw new IllegalArgumentException("Period must be at least 2 days long");
+        }
+
         List<WeightLogPeriod> periods = new ArrayList<>();
         List<WeightLogEntry> sortedEntries = entries.stream()
                 .sorted(Comparator.comparing(WeightLogEntry::date))
                 .toList();
 
-        LocalDate lastDayOfCurrentPeriod = startDate;
-
-        lastDayOfCurrentPeriod = lastDayOfCurrentPeriod.plusDays(periodLengthInDays - 1);
+        LocalDate lastDayOfCurrentPeriod = startDate.plusDays(periodLengthInDays - 1);
         int firstIndexOfNextSublist = 0;
+
         for (int i = 0; i < sortedEntries.size(); ++i) {
             if (sortedEntries.get(i).date().equals(lastDayOfCurrentPeriod)) {
                 WeightLogPeriod period = new WeightLogPeriod(
@@ -101,6 +104,12 @@ public class WeightLog {
                 periods.add(period);
                 lastDayOfCurrentPeriod = lastDayOfCurrentPeriod.plusDays(periodLengthInDays);
                 firstIndexOfNextSublist = i;
+            } else if (i == sortedEntries.size() - 1) { //last incomplete period
+                WeightLogPeriod period = new WeightLogPeriod(
+                        sortedEntries.subList(firstIndexOfNextSublist, i + 1),
+                        lastDayOfCurrentPeriod.minusDays(periodLengthInDays - 1),
+                        lastDayOfCurrentPeriod);
+                periods.add(period);
             }
         }
         return periods;

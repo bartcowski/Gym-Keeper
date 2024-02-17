@@ -1,4 +1,4 @@
-package com.github.bartcowski.gymkeeper.app;
+package com.github.bartcowski.gymkeeper.app.user;
 
 import com.github.bartcowski.gymkeeper.domain.user.*;
 import lombok.AllArgsConstructor;
@@ -14,22 +14,31 @@ public class UserService {
 
     private final UserRepository userRepository;
 
-    public List<User> findAllUsers() {
-        return userRepository.findAllUsers();
+    @Transactional(readOnly = true)
+    public List<UserDTO> findAllUsers() {
+        return userRepository.findAllUsers()
+                .stream()
+                .map(UserDTO::fromDomain)
+                .toList();
     }
 
-    public Optional<User> findUserById(UserId userId) {
-        return userRepository.findUserById(userId);
+    @Transactional(readOnly = true)
+    public Optional<UserDTO> findUserById(UserId userId) {
+        return userRepository.findUserById(userId).map(UserDTO::fromDomain);
     }
 
-    public Optional<User> findUserByName(Username username) {
-        return userRepository.findUserByName(username);
+    @Transactional(readOnly = true)
+    public Optional<UserDTO> findUserByName(Username username) {
+        return userRepository.findUserByName(username).map(UserDTO::fromDomain);
     }
 
-    public User addUser(CreateUserCommand command) {
-        return userRepository.addUser(command);
+    @Transactional
+    public UserDTO addUser(CreateUserCommand command) {
+        User user = userRepository.addUser(command);
+        return UserDTO.fromDomain(user);
     }
 
+    @Transactional
     public void deleteUser(UserId userId) {
         userRepository.deleteUser(userId);
     }

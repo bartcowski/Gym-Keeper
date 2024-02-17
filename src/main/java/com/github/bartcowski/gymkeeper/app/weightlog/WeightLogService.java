@@ -1,4 +1,4 @@
-package com.github.bartcowski.gymkeeper.app;
+package com.github.bartcowski.gymkeeper.app.weightlog;
 
 import com.github.bartcowski.gymkeeper.domain.event.DomainEventPublisher;
 import com.github.bartcowski.gymkeeper.domain.event.WeightLogEntryAdded;
@@ -19,27 +19,39 @@ public class WeightLogService {
 
     private final DomainEventPublisher eventPublisher;
 
-    public List<WeightLog> findAllUsersWeightLogs(UserId userId) {
-        return weightLogRepository.findAllUsersWeightLogs(userId);
+    @Transactional(readOnly = true)
+    public List<WeightLogDTO> findAllUsersWeightLogs(UserId userId) {
+        return weightLogRepository.findAllUsersWeightLogs(userId)
+                .stream()
+                .map(WeightLogDTO::fromDomain)
+                .toList();
     }
 
-    public Optional<WeightLog> findWeightLogById(WeightLogId weightLogId) {
-        return weightLogRepository.findWeightLogById(weightLogId);
+    @Transactional(readOnly = true)
+    public Optional<WeightLogDTO> findWeightLogById(WeightLogId weightLogId) {
+        return weightLogRepository.findWeightLogById(weightLogId).map(WeightLogDTO::fromDomain);
     }
 
-    public WeightLog addWeightLog(CreateWeightLogCommand command) {
-        return weightLogRepository.addWeightLog(command);
+    @Transactional
+    public WeightLogDTO addWeightLog(CreateWeightLogCommand command) {
+        WeightLog weightLog = weightLogRepository.addWeightLog(command);
+        return WeightLogDTO.fromDomain(weightLog);
     }
 
+    @Transactional
     public void deleteWeightLog(WeightLogId weightLogId) {
         weightLogRepository.deleteWeightLog(weightLogId);
     }
 
-    public List<WeightLogPeriod> getWeightLogPeriods(WeightLogId weightLogId, int periodLengthInDays) {
+    @Transactional(readOnly = true)
+    public List<WeightLogPeriodDTO> getWeightLogPeriods(WeightLogId weightLogId, int periodLengthInDays) {
         WeightLog weightLog = weightLogRepository.findWeightLogById(weightLogId)
                 .orElseThrow(() -> new IllegalStateException(
                         "Unable to get weight log periods because no weight log of id: " + weightLogId.id() + " can be found"));
-        return weightLog.convertToPeriods(periodLengthInDays);
+        return weightLog.convertToPeriods(periodLengthInDays)
+                .stream()
+                .map(WeightLogPeriodDTO::fromDomain)
+                .toList();
     }
 
     @Transactional
@@ -52,11 +64,12 @@ public class WeightLogService {
     }
 
     @Transactional
-    public void renameWeightLog(WeightLogName weightLogName, WeightLogId weightLogId) {
+    public WeightLogDTO renameWeightLog(WeightLogName weightLogName, WeightLogId weightLogId) {
         WeightLog weightLog = weightLogRepository.findWeightLogById(weightLogId)
                 .orElseThrow(() -> new IllegalStateException(
                         "Unable to rename weight log because no weight log of id: " + weightLogId.id() + " can be found"));
         weightLog.renameWeightLog(weightLogName);
+        return WeightLogDTO.fromDomain(weightLog);
     }
 
 }

@@ -1,4 +1,4 @@
-package com.github.bartcowski.gymkeeper.app;
+package com.github.bartcowski.gymkeeper.app.weightlog;
 
 import com.github.bartcowski.gymkeeper.domain.user.UserId;
 import com.github.bartcowski.gymkeeper.domain.weightlog.CreateWeightLogCommand;

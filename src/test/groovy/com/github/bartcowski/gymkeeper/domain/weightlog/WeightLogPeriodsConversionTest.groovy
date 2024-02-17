@@ -9,6 +9,7 @@ import java.time.LocalDate
 
 class WeightLogPeriodsConversionTest extends Specification {
 
+    //TODO: improve test, add more cases
     def "should convert whole work log to 3 days periods"() {
         given:
         def weightLog = createWeightLogWithEntries([

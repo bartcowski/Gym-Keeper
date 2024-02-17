@@ -1,20 +1,20 @@
-package com.github.bartcowski.gymkeeper.infrastructure.web;
+package com.github.bartcowski.gymkeeper.app.user;
 
 import com.github.bartcowski.gymkeeper.domain.user.*;
 
-class CreateUserDTO {
+public class CreateUserDTO {
 
-    String username;
+    public String username;
 
-    String gender;
+    public String gender;
 
-    int age;
+    public int age;
 
-    double weight;
+    public double weight;
 
-    int height;
+    public int height;
 
-    CreateUserCommand toDomain() {
+    public CreateUserCommand toDomain() {
         return new CreateUserCommand(
                 new Username(this.username),
                 gender.equalsIgnoreCase("male") ? UserGender.MALE : UserGender.FEMALE,

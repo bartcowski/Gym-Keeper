@@ -1,22 +1,22 @@
-package com.github.bartcowski.gymkeeper.infrastructure.web;
+package com.github.bartcowski.gymkeeper.app.user;
 
 import com.github.bartcowski.gymkeeper.domain.user.User;
 
-class UserDTO {
+public class UserDTO {
 
-    long id;
+    public long id;
 
-    String username;
+    public String username;
 
-    String gender;
+    public String gender;
 
-    int age;
+    public int age;
 
-    double weight;
+    public double weight;
 
-    int height;
+    public int height;
 
-    UserDTO(long id, String username, String gender, int age, double weight, int height) {
+    public UserDTO(long id, String username, String gender, int age, double weight, int height) {
         this.id = id;
         this.username = username;
         this.gender = gender;
@@ -25,7 +25,7 @@ class UserDTO {
         this.height = height;
     }
 
-    static UserDTO fromDomain(User user) {
+    public static UserDTO fromDomain(User user) {
         return new UserDTO(
                 user.getId().id(),
                 user.getUsername().username(),

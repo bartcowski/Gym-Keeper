@@ -1,9 +1,14 @@
 package com.github.bartcowski.gymkeeper;
 
-import com.github.bartcowski.gymkeeper.app.UserService;
-import com.github.bartcowski.gymkeeper.app.WeightLogService;
+import com.github.bartcowski.gymkeeper.app.user.UserDTO;
+import com.github.bartcowski.gymkeeper.app.user.UserService;
+import com.github.bartcowski.gymkeeper.app.weightlog.WeightLogDTO;
+import com.github.bartcowski.gymkeeper.app.weightlog.WeightLogService;
 import com.github.bartcowski.gymkeeper.domain.user.*;
-import com.github.bartcowski.gymkeeper.domain.weightlog.*;
+import com.github.bartcowski.gymkeeper.domain.weightlog.CreateWeightLogCommand;
+import com.github.bartcowski.gymkeeper.domain.weightlog.CreateWeightLogEntryCommand;
+import com.github.bartcowski.gymkeeper.domain.weightlog.WeightLogId;
+import com.github.bartcowski.gymkeeper.domain.weightlog.WeightLogName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -31,20 +36,20 @@ class WeightLogEntryAddedAndUserWeightUpdatedIntegrationTest {
         //when: user and their new empty weight log saved
         UserId userId = addUser();
         WeightLogId weightLogId = addWeightLog(userId);
-        WeightLog savedWeightLog = weightLogService.findWeightLogById(weightLogId).orElse(null);
+        WeightLogDTO savedWeightLog = weightLogService.findWeightLogById(weightLogId).orElse(null);
 
         //then: saved weight log is present and linked to a proper user
         assertNotNull(savedWeightLog);
-        assertEquals(userId, savedWeightLog.getUserId());
+        assertEquals(userId.id(), savedWeightLog.userId);
 
         //when: new entry is added to the weight log (event informing about weight change published as a result)
         CreateWeightLogEntryCommand entryCommand = new CreateWeightLogEntryCommand(updatedUserWeight, LocalDate.EPOCH);
-        weightLogService.addWeightLogEntry(entryCommand, savedWeightLog.getId());
-        User user = userService.findUserById(userId).orElse(null);
+        weightLogService.addWeightLogEntry(entryCommand, new WeightLogId(savedWeightLog.id));
+        UserDTO user = userService.findUserById(userId).orElse(null);
 
         //then: user is still present and their weight is updated
         assertNotNull(user);
-        assertEquals(updatedUserWeight, user.getWeight());
+        assertEquals(updatedUserWeight.value(), user.weight);
     }
 
     private WeightLogId addWeightLog(UserId userId) {
@@ -53,7 +58,7 @@ class WeightLogEntryAddedAndUserWeightUpdatedIntegrationTest {
                 new WeightLogName("weightlog"),
                 LocalDate.MIN
         );
-        return weightLogService.addWeightLog(command).getId();
+        return new WeightLogId(weightLogService.addWeightLog(command).id);
     }
 
     private UserId addUser() {
@@ -64,7 +69,7 @@ class WeightLogEntryAddedAndUserWeightUpdatedIntegrationTest {
                 initialUserWeight,
                 new UserHeight(185)
         );
-        return userService.addUser(createUserCommand).getId();
+        return new UserId(userService.addUser(createUserCommand).id);
     }
 
 }

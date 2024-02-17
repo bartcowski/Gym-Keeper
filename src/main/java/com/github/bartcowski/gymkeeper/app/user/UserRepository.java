@@ -1,4 +1,4 @@
-package com.github.bartcowski.gymkeeper.app;
+package com.github.bartcowski.gymkeeper.app.user;
 
 import com.github.bartcowski.gymkeeper.domain.user.CreateUserCommand;
 import com.github.bartcowski.gymkeeper.domain.user.User;

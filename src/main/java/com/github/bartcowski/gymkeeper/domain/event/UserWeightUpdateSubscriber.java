@@ -1,6 +1,6 @@
 package com.github.bartcowski.gymkeeper.domain.event;
 
-import com.github.bartcowski.gymkeeper.app.UserService;
+import com.github.bartcowski.gymkeeper.app.user.UserService;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 

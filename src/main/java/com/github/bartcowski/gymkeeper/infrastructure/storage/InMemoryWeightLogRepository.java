@@ -1,6 +1,6 @@
 package com.github.bartcowski.gymkeeper.infrastructure.storage;
 
-import com.github.bartcowski.gymkeeper.app.WeightLogRepository;
+import com.github.bartcowski.gymkeeper.app.weightlog.WeightLogRepository;
 import com.github.bartcowski.gymkeeper.domain.user.UserId;
 import com.github.bartcowski.gymkeeper.domain.weightlog.CreateWeightLogCommand;
 import com.github.bartcowski.gymkeeper.domain.weightlog.WeightLog;
