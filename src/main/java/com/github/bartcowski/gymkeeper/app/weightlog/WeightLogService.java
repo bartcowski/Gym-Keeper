@@ -8,6 +8,7 @@ import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.time.LocalDate;
 import java.util.List;
 import java.util.Optional;
 
@@ -61,6 +62,14 @@ public class WeightLogService {
                         "Unable to add new weight log entry because no corresponding weight log of id: " + weightLogId.id() + " can be found"));
         WeightLogEntryAdded weightLogEntryAdded = weightLog.addNewEntry(command);
         eventPublisher.publish(weightLogEntryAdded);
+    }
+
+    @Transactional
+    public void deleteWeightLogEntry(LocalDate entryToDeleteDate, WeightLogId weightLogId) {
+        WeightLog weightLog = weightLogRepository.findWeightLogById(weightLogId)
+                .orElseThrow(() -> new IllegalStateException(
+                        "Unable to delete weight log entry because no corresponding weight log of id: " + weightLogId.id() + " can be found"));
+        weightLog.deleteEntryFromDay(entryToDeleteDate);
     }
 
     @Transactional

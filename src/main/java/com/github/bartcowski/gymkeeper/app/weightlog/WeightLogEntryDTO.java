@@ -6,16 +6,13 @@ import java.time.LocalDate;
 
 class WeightLogEntryDTO {
 
-    long id;
-
     double weight;
 
     LocalDate date;
 
     String comment;
 
-    WeightLogEntryDTO(long id, double weight, LocalDate date, String comment) {
-        this.id = id;
+    WeightLogEntryDTO(double weight, LocalDate date, String comment) {
         this.weight = weight;
         this.date = date;
         this.comment = comment;
@@ -23,7 +20,6 @@ class WeightLogEntryDTO {
 
     static WeightLogEntryDTO fromDomain(WeightLogEntry domainEntry) {
         return new WeightLogEntryDTO(
-                domainEntry.id().id(),
                 domainEntry.weight().value(),
                 domainEntry.date(),
                 domainEntry.comment()

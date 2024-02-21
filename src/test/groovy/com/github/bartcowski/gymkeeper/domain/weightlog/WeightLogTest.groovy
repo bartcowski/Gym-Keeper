@@ -5,16 +5,15 @@ import com.github.bartcowski.gymkeeper.domain.user.UserWeight
 import spock.lang.Specification
 
 import java.time.LocalDate
-import java.util.stream.Collectors
 
 class WeightLogTest extends Specification {
 
-    def "should return weight log end date which is the date of te last entry in it"() {
+    def "should return weight log end date which is the date of the last entry in it"() {
         given:
         def weightLog = createWeightLogWithEntries([
-                new WeightLogEntry(new WeightLogEntryId(1), new UserWeight(86.4), LocalDate.of(2023, 1, 9)),
-                new WeightLogEntry(new WeightLogEntryId(2), new UserWeight(86.7), LocalDate.of(2023, 1, 2)),
-                new WeightLogEntry(new WeightLogEntryId(3), new UserWeight(86.6), LocalDate.of(2023, 1, 4))
+                new WeightLogEntry(new UserWeight(86.4), LocalDate.of(2023, 1, 9)),
+                new WeightLogEntry(new UserWeight(86.7), LocalDate.of(2023, 1, 2)),
+                new WeightLogEntry(new UserWeight(86.6), LocalDate.of(2023, 1, 4))
         ])
 
         when:
@@ -24,56 +23,42 @@ class WeightLogTest extends Specification {
         endDate == LocalDate.of(2023, 1, 9)
     }
 
-    def "should properly add first new entry and assign ID = 0"() {
+    def "should properly add new entry"() {
         given:
+        def date = LocalDate.of(2023, 1, 2)
         def weightLog = createWeightLogWithEntries([])
-        def command = new CreateWeightLogEntryCommand(new UserWeight(86.7), LocalDate.of(2023, 1, 2))
+        def command = new CreateWeightLogEntryCommand(new UserWeight(86.7), date)
 
         when:
         weightLog.addNewEntry(command)
 
         then:
         weightLog.entries.size() == 1
-        weightLog.entries.get(0).id() == new WeightLogEntryId(0)
+        weightLog.entries.get(0).date() == date
     }
 
-    def "should properly add entries when some already exist and assign IDs"() {
+    def "should delete entry when given valid date"() {
         given:
-        def existingLogEntry = new WeightLogEntry(new WeightLogEntryId(10), new UserWeight(80.1), LocalDate.of(2023, 1, 2))
-        def weightLog = createWeightLogWithEntries([existingLogEntry])
-        def command1 = new CreateWeightLogEntryCommand(new UserWeight(86.7), LocalDate.of(2023, 1, 3))
-        def command2 = new CreateWeightLogEntryCommand(new UserWeight(85.0), LocalDate.of(2023, 1, 4))
-
-        when:
-        weightLog.addNewEntry(command1)
-        weightLog.addNewEntry(command2)
-
-        then:
-        weightLog.entries.size() == 3
-        weightLog.entries.stream().map(WeightLogEntry::id).collect(Collectors.toList()).containsAll(
-                new WeightLogEntryId(10), new WeightLogEntryId(11), new WeightLogEntryId(12)
-        )
-    }
-
-    def "should delete entry when given valid id"() {
-        given:
-        def existingLogEntry = new WeightLogEntry(new WeightLogEntryId(10), new UserWeight(80.1), LocalDate.of(2023, 1, 2))
+        def date = LocalDate.of(2023, 1, 2)
+        def existingLogEntry = new WeightLogEntry(new UserWeight(80.1), date)
         def weightLog = createWeightLogWithEntries([existingLogEntry])
 
         when:
-        weightLog.deleteEntry(new WeightLogEntryId(10))
+        weightLog.deleteEntryFromDay(date)
 
         then:
         weightLog.entries.size() == 0
     }
 
-    def "should do nothing when trying to delete entry of non-existing id"() {
+    def "should do nothing when trying to delete entry from a day that does not have any entry"() {
         given:
-        def existingLogEntry = new WeightLogEntry(new WeightLogEntryId(10), new UserWeight(80.1), LocalDate.of(2023, 1, 2))
+        def date = LocalDate.of(2023, 1, 2)
+        def existingLogEntry = new WeightLogEntry(new UserWeight(80.1), date)
         def weightLog = createWeightLogWithEntries([existingLogEntry])
+        def invalidDate = LocalDate.of(2999, 10, 10)
 
         when:
-        weightLog.deleteEntry(new WeightLogEntryId(999))
+        weightLog.deleteEntryFromDay(invalidDate)
 
         then:
         weightLog.entries.size() == 1
@@ -82,7 +67,7 @@ class WeightLogTest extends Specification {
 
     def "should not add new entry and throw exception when #reason"() {
         given:
-        def existingLogEntry = new WeightLogEntry(new WeightLogEntryId(1), new UserWeight(80.1), LocalDate.of(2023, 1, 2))
+        def existingLogEntry = new WeightLogEntry(new UserWeight(80.1), LocalDate.of(2023, 1, 2))
         def weightLog = createWeightLogWithEntries([existingLogEntry])
         def command = new CreateWeightLogEntryCommand(new UserWeight(86.7), newLogEntryDate)
 

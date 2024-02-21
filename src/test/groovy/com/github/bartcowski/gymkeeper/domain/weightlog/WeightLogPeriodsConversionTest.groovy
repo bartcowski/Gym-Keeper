@@ -14,15 +14,15 @@ class WeightLogPeriodsConversionTest extends Specification {
         given:
         def weightLog = createWeightLogWithEntries([
                 // 1st period
-                new WeightLogEntry(new WeightLogEntryId(1), new UserWeight(85.0), LocalDate.of(2023, 1, 2)),
-                new WeightLogEntry(new WeightLogEntryId(2), new UserWeight(86.0), LocalDate.of(2023, 1, 3)),
+                new WeightLogEntry(new UserWeight(85.0), LocalDate.of(2023, 1, 2)),
+                new WeightLogEntry(new UserWeight(86.0), LocalDate.of(2023, 1, 3)),
                 // 2nd period
-                new WeightLogEntry(new WeightLogEntryId(3), new UserWeight(90.0), LocalDate.of(2023, 1, 4)),
-                new WeightLogEntry(new WeightLogEntryId(4), new UserWeight(90.0), LocalDate.of(2023, 1, 5)),
+                new WeightLogEntry(new UserWeight(90.0), LocalDate.of(2023, 1, 4)),
+                new WeightLogEntry(new UserWeight(90.0), LocalDate.of(2023, 1, 5)),
                 // 3rd period
-                new WeightLogEntry(new WeightLogEntryId(5), new UserWeight(81.3), LocalDate.of(2023, 1, 7)),
-                new WeightLogEntry(new WeightLogEntryId(6), new UserWeight(82.9), LocalDate.of(2023, 1, 8)),
-                new WeightLogEntry(new WeightLogEntryId(7), new UserWeight(81.7), LocalDate.of(2023, 1, 9))
+                new WeightLogEntry(new UserWeight(81.3), LocalDate.of(2023, 1, 7)),
+                new WeightLogEntry(new UserWeight(82.9), LocalDate.of(2023, 1, 8)),
+                new WeightLogEntry(new UserWeight(81.7), LocalDate.of(2023, 1, 9))
         ])
 
         when:

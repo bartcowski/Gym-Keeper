@@ -54,6 +54,12 @@ public class WeightLogResource {
         return ResponseEntity.status(HttpStatus.CREATED).build();
     }
 
+    @DeleteMapping("/{weightLogId}/entries")
+    public ResponseEntity<Void> deleteWeightLogEntry(@PathVariable long weightLogId, @RequestBody DeleteWeightLogEntryDTO deleteEntryDTO) {
+        weightLogService.deleteWeightLogEntry(deleteEntryDTO.date, new WeightLogId(weightLogId));
+        return ResponseEntity.ok().build();
+    }
+
     @PutMapping("/{weightLogId}")
     public ResponseEntity<WeightLogDTO> renameWeightLog(@PathVariable long weightLogId, @RequestBody RenameWeightLogDTO renameWeightLogDTO) {
         WeightLogDTO weightLogDTO = weightLogService.renameWeightLog(
