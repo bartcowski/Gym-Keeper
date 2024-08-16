@@ -4,21 +4,21 @@ import com.github.bartcowski.gymkeeper.domain.weightlog.WeightLogEntry;
 
 import java.time.LocalDate;
 
-class WeightLogEntryDTO {
+public class WeightLogEntryDTO {
 
-    double weight;
+    public double weight;
 
-    LocalDate date;
+    public LocalDate date;
 
-    String comment;
+    public String comment;
 
-    WeightLogEntryDTO(double weight, LocalDate date, String comment) {
+    public WeightLogEntryDTO(double weight, LocalDate date, String comment) {
         this.weight = weight;
         this.date = date;
         this.comment = comment;
     }
 
-    static WeightLogEntryDTO fromDomain(WeightLogEntry domainEntry) {
+    public static WeightLogEntryDTO fromDomain(WeightLogEntry domainEntry) {
         return new WeightLogEntryDTO(
                 domainEntry.weight().value(),
                 domainEntry.date(),

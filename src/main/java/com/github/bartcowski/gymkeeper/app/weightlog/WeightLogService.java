@@ -56,12 +56,13 @@ public class WeightLogService {
     }
 
     @Transactional
-    public void addWeightLogEntry(CreateWeightLogEntryCommand command, WeightLogId weightLogId) {
+    public WeightLogDTO addWeightLogEntry(CreateWeightLogEntryCommand command, WeightLogId weightLogId) {
         WeightLog weightLog = weightLogRepository.findWeightLogById(weightLogId)
                 .orElseThrow(() -> new IllegalStateException(
                         "Unable to add new weight log entry because no corresponding weight log of id: " + weightLogId.id() + " can be found"));
         WeightLogEntryAdded weightLogEntryAdded = weightLog.addNewEntry(command);
         eventPublisher.publish(weightLogEntryAdded);
+        return WeightLogDTO.fromDomain(weightLog);
     }
 
     @Transactional
