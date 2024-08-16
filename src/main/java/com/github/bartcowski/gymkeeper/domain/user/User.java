@@ -1,13 +1,13 @@
 package com.github.bartcowski.gymkeeper.domain.user;
 
+import com.github.bartcowski.gymkeeper.util.DoubleUtil;
 import lombok.AllArgsConstructor;
+import lombok.EqualsAndHashCode;
 import lombok.Getter;
-
-import java.math.BigDecimal;
-import java.math.RoundingMode;
 
 @AllArgsConstructor
 @Getter
+@EqualsAndHashCode
 public class User {
 
     private final UserId id;
@@ -28,7 +28,7 @@ public class User {
 
     public double calculateBMI() {
         double BMI = weight.value() / (height.inMetres() * height.inMetres());
-        return new BigDecimal(BMI).setScale(2, RoundingMode.HALF_UP).doubleValue();
+        return DoubleUtil.roundDoubleToTwoDecimalPlaces(BMI);
     }
 
     public double calculateFFMI(BodyFatPercentage bodyFatPercentage) {
@@ -36,6 +36,6 @@ public class User {
         double leanWeight = weight.value() - totalBodyFat;
         double FFMI = leanWeight / (height.inMetres() * height.inMetres());
         double normalizedFFMI = FFMI + 6.1 * (1.8 - height.inMetres());
-        return new BigDecimal(normalizedFFMI).setScale(2, RoundingMode.HALF_UP).doubleValue();
+        return DoubleUtil.roundDoubleToTwoDecimalPlaces(normalizedFFMI);
     }
 }

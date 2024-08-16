@@ -1,6 +1,7 @@
 package com.github.bartcowski.gymkeeper.domain.workout;
 
 import com.github.bartcowski.gymkeeper.domain.user.UserId;
+import lombok.EqualsAndHashCode;
 import lombok.Getter;
 
 import java.time.LocalDate;
@@ -11,6 +12,7 @@ import java.util.Optional;
 import java.util.function.Function;
 
 @Getter
+@EqualsAndHashCode
 public class Workout {
 
     private final WorkoutId id;
@@ -28,11 +30,10 @@ public class Workout {
     public Workout(WorkoutId id, UserId userId, List<Exercise> exercises, LocalDate date, boolean isDeload, String comment) {
         this.id = id;
         this.userId = userId;
-        this.exercises = new ArrayList<>();
+        this.exercises = exercises; //TODO: some validation?
         this.date = date;
         this.isDeload = isDeload;
         this.comment = comment;
-        updateExercises(exercises);
     }
 
     public Workout(WorkoutId id, UserId userId, LocalDate date, boolean isDeload, String comment) {
@@ -44,42 +45,64 @@ public class Workout {
         this.comment = comment;
     }
 
-    public void updateExercises(List<Exercise> updatedExercises) {
-        validateUpdatedExercises(updatedExercises);
-        for (Exercise e : updatedExercises) {
-            addOrReplaceExercise(e);
-        }
+    public void updateWorkout(UpdateWorkoutCommand command) {
+        this.date = command.date();
+        this.isDeload = command.isDeload();
+        this.comment = command.comment();
+    }
+
+    public void addExercise(Exercise newExercise) {
+        validateExerciseToAddOrUpdate(newExercise);
+        exercises.add(newExercise);
     }
 
     public void updateExercise(Exercise updatedExercise) {
-        addOrReplaceExercise(updatedExercise);
+        validateExerciseToAddOrUpdate(updatedExercise);
+        findExerciseById(updatedExercise.getId())
+                .orElseThrow(() -> new IllegalStateException(
+                        "Exercise " + updatedExercise.getId().id() + " cannot be found in workout " + this.id))
+                .update(updatedExercise);
     }
 
-    private void validateUpdatedExercises(List<Exercise> exercises) {
-        validateIfContainsDuplicates(exercises, Exercise::exerciseType);
-        for (Exercise e : exercises) {
-            validateIfContainsDuplicates(e.sets(), ExerciseSet::index);
+    public void deleteExercise(ExerciseId exerciseId) {
+        Exercise exerciseToRemove = null;
+        for (Exercise exercise : exercises) {
+            if (exerciseToRemove != null) {
+                exercise.decrementIndex();
+            }
+            if (exercise.getId().equals(exerciseId)) {
+                exerciseToRemove = exercise;
+            }
         }
+        exercises.remove(exerciseToRemove);
+    }
+
+    private void validateExerciseToAddOrUpdate(Exercise exerciseToValidate) {
+        validateIfContainsDuplicates(exerciseToValidate.getSets(), ExerciseSet::getIndex);
+        for (Exercise e : exercises) {
+            if (e.getId().equals(exerciseToValidate.getId())) {
+                continue;
+            }
+            if (e.getExerciseType() == exerciseToValidate.getExerciseType()) {
+                throw new IllegalStateException("Exercises within workout can't have duplicate types, failed update of workout " + this.id);
+            }
+            if (e.getIndex() == exerciseToValidate.getIndex()) {
+                throw new IllegalStateException("Exercises within workout can't have duplicate indexes, failed update of workout " + this.id);
+            }
+        }
+    }
+
+    private Optional<Exercise> findExerciseById(ExerciseId exerciseId) {
+        return exercises.stream()
+                .filter(e -> e.getId().equals(exerciseId))
+                .findFirst();
     }
 
     private <T, U> void validateIfContainsDuplicates(List<T> elements, Function<T, U> mapper) {
         List<U> mappedElements = elements.stream().map(mapper).toList();
         HashSet<U> mappedDistinctElements = new HashSet<>(mappedElements);
         if (mappedDistinctElements.size() < mappedElements.size()) {
-            throw new IllegalStateException("Duplicate type or index found while trying to update exercises: " + elements);
+            throw new IllegalStateException("Duplicate index found while trying to update exercises: " + elements);
         }
     }
-
-    private void addOrReplaceExercise(Exercise e) {
-        Optional<Exercise> exerciseOfTheSameType = findAlreadyExistingExerciseOfTheSameType(e);
-        exerciseOfTheSameType.ifPresent(exercises::remove);
-        exercises.add(e);
-    }
-
-    private Optional<Exercise> findAlreadyExistingExerciseOfTheSameType(Exercise exercise) {
-        return exercises.stream()
-                .filter(e -> e.exerciseType().equals(exercise.exerciseType()))
-                .findFirst();
-    }
-
 }

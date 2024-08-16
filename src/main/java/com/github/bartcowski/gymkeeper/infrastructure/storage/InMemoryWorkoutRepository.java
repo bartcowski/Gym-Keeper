@@ -1,9 +1,10 @@
 package com.github.bartcowski.gymkeeper.infrastructure.storage;
 
-import com.github.bartcowski.gymkeeper.app.workout.WorkoutRepository;
 import com.github.bartcowski.gymkeeper.domain.user.UserId;
+import com.github.bartcowski.gymkeeper.domain.workout.CreateWorkoutCommand;
 import com.github.bartcowski.gymkeeper.domain.workout.Workout;
 import com.github.bartcowski.gymkeeper.domain.workout.WorkoutId;
+import com.github.bartcowski.gymkeeper.domain.workout.WorkoutRepository;
 import org.springframework.stereotype.Service;
 
 import java.util.HashMap;
@@ -13,6 +14,8 @@ import java.util.Optional;
 
 @Service
 public class InMemoryWorkoutRepository implements WorkoutRepository {
+
+    private static long workoutIdCounter = 0;
 
     private final Map<WorkoutId, Workout> workoutsMap = new HashMap<>();
 
@@ -30,13 +33,20 @@ public class InMemoryWorkoutRepository implements WorkoutRepository {
     }
 
     @Override
-    public void addWorkout(Workout workout) {
+    public Workout addWorkout(CreateWorkoutCommand command) {
+        Workout workout = new Workout(
+                new WorkoutId(workoutIdCounter++),
+                command.userId(),
+                command.date(),
+                command.isDeload(),
+                command.comment()
+        );
         workoutsMap.put(workout.getId(), workout);
+        return workout;
     }
 
     @Override
     public void deleteWorkout(WorkoutId workoutId) {
         workoutsMap.remove(workoutId);
     }
-
 }

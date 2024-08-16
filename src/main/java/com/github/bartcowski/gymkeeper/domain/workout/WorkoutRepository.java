@@ -1,19 +1,18 @@
-package com.github.bartcowski.gymkeeper.app.workout;
+package com.github.bartcowski.gymkeeper.domain.workout;
 
+import com.github.bartcowski.gymkeeper.domain.IdGeneratingRepository;
 import com.github.bartcowski.gymkeeper.domain.user.UserId;
-import com.github.bartcowski.gymkeeper.domain.workout.Workout;
-import com.github.bartcowski.gymkeeper.domain.workout.WorkoutId;
 
 import java.util.List;
 import java.util.Optional;
 
-public interface WorkoutRepository {
+public interface WorkoutRepository extends IdGeneratingRepository {
 
     List<Workout> findAllUsersWorkouts(UserId userId);
 
     Optional<Workout> findWorkoutById(WorkoutId workoutId);
 
-    void addWorkout(Workout workout);
+    Workout addWorkout(CreateWorkoutCommand command);
 
     void deleteWorkout(WorkoutId workoutId);
 

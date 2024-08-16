@@ -1,10 +1,6 @@
 package com.github.bartcowski.gymkeeper.infrastructure.storage;
 
-import com.github.bartcowski.gymkeeper.app.user.UserRepository;
-import com.github.bartcowski.gymkeeper.domain.user.CreateUserCommand;
-import com.github.bartcowski.gymkeeper.domain.user.User;
-import com.github.bartcowski.gymkeeper.domain.user.UserId;
-import com.github.bartcowski.gymkeeper.domain.user.Username;
+import com.github.bartcowski.gymkeeper.domain.user.*;
 import org.springframework.stereotype.Service;
 
 import java.util.*;
@@ -36,14 +32,13 @@ public class InMemoryUserRepository implements UserRepository {
     @Override
     public User addUser(CreateUserCommand command) {
         User newUser = new User(
-                new UserId(userIdCounter),
+                new UserId(userIdCounter++),
                 command.username(),
                 command.gender(),
                 command.age(),
                 command.weight(),
                 command.height());
         usersMap.put(newUser.getId(), newUser);
-        userIdCounter++;
         return newUser;
     }
 

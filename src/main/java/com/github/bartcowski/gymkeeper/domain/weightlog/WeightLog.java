@@ -2,6 +2,7 @@ package com.github.bartcowski.gymkeeper.domain.weightlog;
 
 import com.github.bartcowski.gymkeeper.domain.event.WeightLogEntryAdded;
 import com.github.bartcowski.gymkeeper.domain.user.UserId;
+import lombok.EqualsAndHashCode;
 import lombok.Getter;
 
 import java.time.LocalDate;
@@ -10,6 +11,7 @@ import java.util.Comparator;
 import java.util.List;
 
 @Getter
+@EqualsAndHashCode
 public class WeightLog {
 
     private final WeightLogId id;
