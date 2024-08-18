@@ -1,5 +1,6 @@
 package com.github.bartcowski.gymkeeper.app.weightlog;
 
+import com.github.bartcowski.gymkeeper.domain.user.UserWeight;
 import com.github.bartcowski.gymkeeper.domain.weightlog.WeightLogEntry;
 
 import java.time.LocalDate;
@@ -23,6 +24,14 @@ public class WeightLogEntryDTO {
                 domainEntry.weight().value(),
                 domainEntry.date(),
                 domainEntry.comment()
+        );
+    }
+
+    public WeightLogEntry toDomain() {
+        return new WeightLogEntry(
+                new UserWeight(weight),
+                date,
+                comment
         );
     }
 }

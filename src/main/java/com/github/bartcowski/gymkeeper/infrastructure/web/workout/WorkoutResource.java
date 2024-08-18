@@ -1,11 +1,7 @@
 package com.github.bartcowski.gymkeeper.infrastructure.web.workout;
 
-import com.github.bartcowski.gymkeeper.app.workout.CreateWorkoutDTO;
-import com.github.bartcowski.gymkeeper.app.workout.ExerciseDTO;
-import com.github.bartcowski.gymkeeper.app.workout.WorkoutDTO;
-import com.github.bartcowski.gymkeeper.app.workout.WorkoutService;
+import com.github.bartcowski.gymkeeper.app.workout.*;
 import com.github.bartcowski.gymkeeper.domain.user.UserId;
-import com.github.bartcowski.gymkeeper.domain.workout.CreateExerciseCommand;
 import com.github.bartcowski.gymkeeper.domain.workout.ExerciseId;
 import com.github.bartcowski.gymkeeper.domain.workout.UpdateWorkoutCommand;
 import com.github.bartcowski.gymkeeper.domain.workout.WorkoutId;
@@ -36,14 +32,14 @@ public class WorkoutResource {
     }
 
     @PostMapping
-    public ResponseEntity<WorkoutDTO> createWorkout(@RequestBody CreateWorkoutDTO createWorkoutDTO) {
-        WorkoutDTO workoutDTO = workoutService.addWorkout(createWorkoutDTO.toDomain());
+    public ResponseEntity<WorkoutDTO> createWorkout(@RequestBody CreateWorkoutCommandDTO createWorkoutCommandDTO) {
+        WorkoutDTO workoutDTO = workoutService.addWorkout(createWorkoutCommandDTO.toDomain());
         return ResponseEntity.status(HttpStatus.CREATED).body(workoutDTO);
     }
 
     @PutMapping("/{workoutId}")
-    public ResponseEntity<WorkoutDTO> updateWorkout(@RequestBody UpdateWorkoutCommand command, @PathVariable long workoutId) {
-        WorkoutDTO workoutDTO = workoutService.updateWorkout(command, new WorkoutId(workoutId));
+    public ResponseEntity<WorkoutDTO> updateWorkout(@RequestBody UpdateWorkoutCommand updateWorkoutCommand, @PathVariable long workoutId) {
+        WorkoutDTO workoutDTO = workoutService.updateWorkout(updateWorkoutCommand, new WorkoutId(workoutId));
         return ResponseEntity.ok(workoutDTO);
     }
 
@@ -54,8 +50,8 @@ public class WorkoutResource {
     }
 
     @PostMapping("/{workoutId}/exercises")
-    public ResponseEntity<WorkoutDTO> createExercise(@RequestBody CreateExerciseCommand command, @PathVariable long workoutId) {
-        WorkoutDTO workoutDTO = workoutService.addExercise(command, new WorkoutId(workoutId));
+    public ResponseEntity<WorkoutDTO> createExercise(@RequestBody CreateExerciseCommandDTO createExerciseCommandDTO, @PathVariable long workoutId) {
+        WorkoutDTO workoutDTO = workoutService.addExercise(createExerciseCommandDTO.toDomain(), new WorkoutId(workoutId));
         return ResponseEntity.ok(workoutDTO);
     }
 

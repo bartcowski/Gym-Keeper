@@ -3,7 +3,6 @@ package com.github.bartcowski.gymkeeper.infrastructure.web.weightlog;
 import com.github.bartcowski.gymkeeper.app.weightlog.*;
 import com.github.bartcowski.gymkeeper.domain.user.UserId;
 import com.github.bartcowski.gymkeeper.domain.weightlog.CreateWeightLogCommand;
-import com.github.bartcowski.gymkeeper.domain.weightlog.CreateWeightLogEntryCommand;
 import com.github.bartcowski.gymkeeper.domain.weightlog.WeightLogId;
 import com.github.bartcowski.gymkeeper.domain.weightlog.WeightLogName;
 import lombok.AllArgsConstructor;
@@ -48,16 +47,16 @@ public class WeightLogResource {
     }
 
     @PostMapping
-    public ResponseEntity<WeightLogDTO> createWeightLog(@RequestBody CreateWeightLogDTO createWeightLogDTO) {
-        CreateWeightLogCommand command = createWeightLogDTO.toDomain();
+    public ResponseEntity<WeightLogDTO> createWeightLog(@RequestBody CreateWeightLogCommandDTO createWeightLogCommandDTO) {
+        CreateWeightLogCommand command = createWeightLogCommandDTO.toDomain();
         WeightLogDTO weightLogDTO = weightLogService.addWeightLog(command);
         return ResponseEntity.status(HttpStatus.CREATED).body(weightLogDTO);
     }
 
     @PutMapping("/{weightLogId}")
-    public ResponseEntity<WeightLogDTO> renameWeightLog(@PathVariable long weightLogId, @RequestBody RenameWeightLogDTO renameWeightLogDTO) {
+    public ResponseEntity<WeightLogDTO> renameWeightLog(@PathVariable long weightLogId, @RequestBody WeightLogNameDTO weightLogNameDTO) {
         WeightLogDTO weightLogDTO = weightLogService.renameWeightLog(
-                new WeightLogName(renameWeightLogDTO.name),
+                new WeightLogName(weightLogNameDTO.name),
                 new WeightLogId(weightLogId)
         );
         return ResponseEntity.ok(weightLogDTO);
@@ -70,16 +69,14 @@ public class WeightLogResource {
     }
 
     @PostMapping("/{weightLogId}/entries")
-    public ResponseEntity<WeightLogDTO> createWeightLogEntry(@PathVariable long weightLogId, @RequestBody CreateWeightLogEntryCommandDTO commandDTO) {
-        CreateWeightLogEntryCommand command = commandDTO.toDomain();
-        weightLogService.addWeightLogEntry(command, new WeightLogId(weightLogId));
-        return ResponseEntity.status(HttpStatus.CREATED).build();
+    public ResponseEntity<WeightLogDTO> createWeightLogEntry(@PathVariable long weightLogId, @RequestBody WeightLogEntryDTO weightLogEntryDTO) {
+        WeightLogDTO weightLogDTO = weightLogService.addWeightLogEntry(weightLogEntryDTO.toDomain(), new WeightLogId(weightLogId));
+        return ResponseEntity.status(HttpStatus.CREATED).body(weightLogDTO);
     }
 
     @DeleteMapping("/{weightLogId}/entries")
-    public ResponseEntity<Void> deleteWeightLogEntry(@PathVariable long weightLogId, @RequestBody DeleteWeightLogEntryDTO deleteEntryDTO) {
-        weightLogService.deleteWeightLogEntry(deleteEntryDTO.date, new WeightLogId(weightLogId));
+    public ResponseEntity<Void> deleteWeightLogEntry(@PathVariable long weightLogId, @RequestBody WeightLogEntryDateDTO weightLogEntryDateDTO) {
+        weightLogService.deleteWeightLogEntry(weightLogEntryDateDTO.date, new WeightLogId(weightLogId));
         return ResponseEntity.ok().build();
     }
-
 }

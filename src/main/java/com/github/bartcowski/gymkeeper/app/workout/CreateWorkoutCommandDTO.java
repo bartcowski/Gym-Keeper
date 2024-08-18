@@ -5,11 +5,14 @@ import com.github.bartcowski.gymkeeper.domain.workout.CreateWorkoutCommand;
 
 import java.time.LocalDate;
 
-public class CreateWorkoutDTO {
+public class CreateWorkoutCommandDTO {
 
     public long userId;
+
     public LocalDate date;
+
     public boolean isDeload;
+
     public String comment;
 
     public CreateWorkoutCommand toDomain() {

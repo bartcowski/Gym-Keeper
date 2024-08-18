@@ -8,10 +8,15 @@ import java.util.List;
 public class WorkoutDTO {
 
     public long id;
+
     public long userId;
+
     public List<ExerciseDTO> exercises;
+
     public LocalDate date;
+
     public boolean isDeload;
+
     public String comment;
 
     public WorkoutDTO(long id, long userId, List<ExerciseDTO> exercises, LocalDate date, boolean isDeload, String comment) {

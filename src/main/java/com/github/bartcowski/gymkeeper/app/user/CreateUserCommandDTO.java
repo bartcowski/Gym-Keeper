@@ -2,7 +2,7 @@ package com.github.bartcowski.gymkeeper.app.user;
 
 import com.github.bartcowski.gymkeeper.domain.user.*;
 
-public class CreateUserDTO {
+public class CreateUserCommandDTO {
 
     public String username;
 

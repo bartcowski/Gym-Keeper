@@ -51,17 +51,16 @@ public class WeightLog {
         this.name = newName;
     }
 
-    public WeightLogEntryAdded addNewEntry(CreateWeightLogEntryCommand command) {
-        if (entryForGivenDayAlreadyExists(command.date())) {
+    public WeightLogEntryAdded addNewEntry(WeightLogEntry newEntry) {
+        if (entryForGivenDayAlreadyExists(newEntry.date())) {
             throw new IllegalStateException("Weight log entry for given day already exists!");
         }
-        if (newEntryDateIsBeforeWeightLogStartDate(command.date())) {
+        if (newEntryDateIsBeforeWeightLogStartDate(newEntry.date())) {
             throw new IllegalStateException("New weight log entry cannot be before weight log's start date!");
         }
 
-        WeightLogEntry newWeightLogEntry = new WeightLogEntry(command.weight(), command.date(), command.comment());
-        entries.add(newWeightLogEntry);
-        return new WeightLogEntryAdded(this.userId, command.weight());
+        entries.add(newEntry);
+        return new WeightLogEntryAdded(this.userId, newEntry.weight());
     }
 
     public void deleteEntryFromDay(LocalDate entryToDeleteDate) {

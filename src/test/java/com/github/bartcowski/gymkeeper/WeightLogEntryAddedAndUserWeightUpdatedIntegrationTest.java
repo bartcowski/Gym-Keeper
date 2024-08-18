@@ -6,7 +6,7 @@ import com.github.bartcowski.gymkeeper.app.weightlog.WeightLogDTO;
 import com.github.bartcowski.gymkeeper.app.weightlog.WeightLogService;
 import com.github.bartcowski.gymkeeper.domain.user.*;
 import com.github.bartcowski.gymkeeper.domain.weightlog.CreateWeightLogCommand;
-import com.github.bartcowski.gymkeeper.domain.weightlog.CreateWeightLogEntryCommand;
+import com.github.bartcowski.gymkeeper.domain.weightlog.WeightLogEntry;
 import com.github.bartcowski.gymkeeper.domain.weightlog.WeightLogId;
 import com.github.bartcowski.gymkeeper.domain.weightlog.WeightLogName;
 import org.junit.jupiter.api.Test;
@@ -43,8 +43,8 @@ class WeightLogEntryAddedAndUserWeightUpdatedIntegrationTest {
         assertEquals(userId.id(), savedWeightLog.userId);
 
         //when: new entry is added to the weight log (event informing about weight change published as a result)
-        CreateWeightLogEntryCommand entryCommand = new CreateWeightLogEntryCommand(updatedUserWeight, LocalDate.EPOCH);
-        weightLogService.addWeightLogEntry(entryCommand, new WeightLogId(savedWeightLog.id));
+        WeightLogEntry weightLogEntry = new WeightLogEntry(updatedUserWeight, LocalDate.EPOCH);
+        weightLogService.addWeightLogEntry(weightLogEntry, new WeightLogId(savedWeightLog.id));
         UserDTO user = userService.findUserById(userId).orElse(null);
 
         //then: user is still present and their weight is updated
@@ -71,5 +71,4 @@ class WeightLogEntryAddedAndUserWeightUpdatedIntegrationTest {
         );
         return new UserId(userService.addUser(createUserCommand).id);
     }
-
 }

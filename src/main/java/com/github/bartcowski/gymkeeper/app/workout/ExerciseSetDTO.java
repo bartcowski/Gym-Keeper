@@ -6,7 +6,9 @@ import com.github.bartcowski.gymkeeper.util.DoubleUtil;
 public class ExerciseSetDTO {
 
     public int index;
+
     public int reps;
+
     public double weight;
 
     public ExerciseSetDTO(int index, int reps, double weight) {

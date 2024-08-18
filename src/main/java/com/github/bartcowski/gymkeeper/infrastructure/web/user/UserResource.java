@@ -64,8 +64,8 @@ public class UserResource {
     }
 
     @PostMapping
-    public ResponseEntity<UserDTO> addUser(@RequestBody CreateUserDTO createUserDTO) {
-        CreateUserCommand createUserCommand = createUserDTO.toDomain();
+    public ResponseEntity<UserDTO> addUser(@RequestBody CreateUserCommandDTO createUserCommandDTO) {
+        CreateUserCommand createUserCommand = createUserCommandDTO.toDomain();
         UserDTO createdUser = userService.addUser(createUserCommand);
         return ResponseEntity.status(HttpStatus.CREATED).body(createdUser);
     }

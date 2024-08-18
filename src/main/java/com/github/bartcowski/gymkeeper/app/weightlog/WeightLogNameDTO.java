@@ -1,6 +1,6 @@
 package com.github.bartcowski.gymkeeper.app.weightlog;
 
-public class RenameWeightLogDTO {
+public class WeightLogNameDTO {
 
     public String name;
 

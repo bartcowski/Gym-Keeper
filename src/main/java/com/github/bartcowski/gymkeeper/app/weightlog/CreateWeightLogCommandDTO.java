@@ -6,7 +6,7 @@ import com.github.bartcowski.gymkeeper.domain.weightlog.WeightLogName;
 
 import java.time.LocalDate;
 
-public class CreateWeightLogDTO {
+public class CreateWeightLogCommandDTO {
 
     long userId;
 

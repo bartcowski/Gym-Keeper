@@ -27,10 +27,10 @@ class WeightLogTest extends Specification {
         given:
         def date = LocalDate.of(2023, 1, 2)
         def weightLog = createWeightLogWithEntries([])
-        def command = new CreateWeightLogEntryCommand(new UserWeight(86.7), date)
+        def entry = new WeightLogEntry(new UserWeight(86.7), date)
 
         when:
-        weightLog.addNewEntry(command)
+        weightLog.addNewEntry(entry)
 
         then:
         weightLog.entries.size() == 1
@@ -69,10 +69,10 @@ class WeightLogTest extends Specification {
         given:
         def existingLogEntry = new WeightLogEntry(new UserWeight(80.1), LocalDate.of(2023, 1, 2))
         def weightLog = createWeightLogWithEntries([existingLogEntry])
-        def command = new CreateWeightLogEntryCommand(new UserWeight(86.7), newLogEntryDate)
+        def entry = new WeightLogEntry(new UserWeight(86.7), newLogEntryDate)
 
         when:
-        weightLog.addNewEntry(command)
+        weightLog.addNewEntry(entry)
 
         then:
         thrown(IllegalStateException.class)
@@ -85,7 +85,7 @@ class WeightLogTest extends Specification {
         "new weight log entry is before the weight log's start date"    | LocalDate.of(2022, 12, 31)
     }
 
-    private WeightLog createWeightLogWithEntries(List<WeightLogEntry> entries) {
+    private static WeightLog createWeightLogWithEntries(List<WeightLogEntry> entries) {
         return new WeightLog(
                 new WeightLogId(1),
                 new UserId(10),
