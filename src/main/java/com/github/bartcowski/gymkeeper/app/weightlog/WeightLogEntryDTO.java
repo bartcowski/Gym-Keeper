@@ -21,7 +21,7 @@ public class WeightLogEntryDTO {
 
     public static WeightLogEntryDTO fromDomain(WeightLogEntry domainEntry) {
         return new WeightLogEntryDTO(
-                domainEntry.weight().value(),
+                domainEntry.weight().weight(),
                 domainEntry.date(),
                 domainEntry.comment()
         );

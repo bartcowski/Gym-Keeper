@@ -24,7 +24,7 @@ public class WeightLogPeriod {
         averageWeight = entries
                 .stream()
                 .map(WeightLogEntry::weight)
-                .mapToDouble(UserWeight::value)
+                .mapToDouble(UserWeight::weight)
                 .sum() / entries.size();
     }
 }

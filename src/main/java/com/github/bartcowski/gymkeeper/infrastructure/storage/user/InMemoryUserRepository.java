@@ -1,14 +1,17 @@
-package com.github.bartcowski.gymkeeper.infrastructure.storage;
+package com.github.bartcowski.gymkeeper.infrastructure.storage.user;
 
-import com.github.bartcowski.gymkeeper.domain.user.*;
-import org.springframework.stereotype.Service;
+import com.github.bartcowski.gymkeeper.domain.user.User;
+import com.github.bartcowski.gymkeeper.domain.user.UserId;
+import com.github.bartcowski.gymkeeper.domain.user.UserRepository;
+import com.github.bartcowski.gymkeeper.domain.user.Username;
+import org.springframework.context.annotation.Profile;
+import org.springframework.stereotype.Repository;
 
 import java.util.*;
 
-@Service
+@Repository
+@Profile("test")
 public class InMemoryUserRepository implements UserRepository {
-
-    private static long userIdCounter = 0;
 
     private final Map<UserId, User> usersMap = new HashMap<>();
 
@@ -30,16 +33,9 @@ public class InMemoryUserRepository implements UserRepository {
     }
 
     @Override
-    public User addUser(CreateUserCommand command) {
-        User newUser = new User(
-                new UserId(userIdCounter++),
-                command.username(),
-                command.gender(),
-                command.age(),
-                command.weight(),
-                command.height());
-        usersMap.put(newUser.getId(), newUser);
-        return newUser;
+    public User addUser(User user) {
+        usersMap.put(user.getId(), user);
+        return user;
     }
 
     @Override

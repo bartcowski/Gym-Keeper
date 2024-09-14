@@ -30,9 +30,9 @@ public class UserDTO {
                 user.getId().id(),
                 user.getUsername().username(),
                 user.getGender().toString(),
-                user.getAge().value(),
-                user.getWeight().value(),
-                user.getHeight().value()
+                user.getAge().age(),
+                user.getWeight().weight(),
+                user.getHeight().height()
         );
     }
 }

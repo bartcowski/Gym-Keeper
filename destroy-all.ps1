@@ -1,3 +1,5 @@
+mvn clean
+
 docker-compose down
 
 # delete all images

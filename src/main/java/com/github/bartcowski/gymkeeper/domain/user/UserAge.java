@@ -1,11 +1,13 @@
 package com.github.bartcowski.gymkeeper.domain.user;
 
-public record UserAge(int value) {
+import jakarta.persistence.Embeddable;
+
+@Embeddable
+public record UserAge(int age) {
 
     public UserAge {
-        if (value <= 0 || value > 120) {
+        if (age <= 0 || age > 120) {
             throw new IllegalArgumentException("User must be between 1 and 120 years old");
         }
     }
-
 }

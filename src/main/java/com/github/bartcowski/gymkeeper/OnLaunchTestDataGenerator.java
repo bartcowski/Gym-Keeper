@@ -1,7 +1,10 @@
 package com.github.bartcowski.gymkeeper;
 
+import com.github.bartcowski.gymkeeper.app.user.UserDTO;
 import com.github.bartcowski.gymkeeper.app.user.UserService;
+import com.github.bartcowski.gymkeeper.app.weightlog.WeightLogDTO;
 import com.github.bartcowski.gymkeeper.app.weightlog.WeightLogService;
+import com.github.bartcowski.gymkeeper.app.workout.WorkoutDTO;
 import com.github.bartcowski.gymkeeper.app.workout.WorkoutService;
 import com.github.bartcowski.gymkeeper.domain.user.*;
 import com.github.bartcowski.gymkeeper.domain.weightlog.CreateWeightLogCommand;
@@ -12,6 +15,7 @@ import com.github.bartcowski.gymkeeper.domain.workout.*;
 import lombok.AllArgsConstructor;
 import org.springframework.boot.ApplicationArguments;
 import org.springframework.boot.ApplicationRunner;
+import org.springframework.context.annotation.Profile;
 import org.springframework.stereotype.Component;
 
 import java.time.LocalDate;
@@ -19,6 +23,7 @@ import java.util.List;
 
 @Component
 @AllArgsConstructor
+@Profile("prod")
 public class OnLaunchTestDataGenerator implements ApplicationRunner {
 
     private final UserService userService;
@@ -29,14 +34,14 @@ public class OnLaunchTestDataGenerator implements ApplicationRunner {
 
     @Override
     public void run(ApplicationArguments args) {
-        generateUsers();
-        generateWeightLogs();
-        generateWeightLogEntries();
-        generateWorkouts();
-        generateExercisesWithSets();
+        List<UserDTO> twoGeneratedUsers = generateUsers();
+        List<WeightLogDTO> twoGeneratedWeightLogs = generateWeightLogs(twoGeneratedUsers);
+        generateWeightLogEntries(twoGeneratedWeightLogs);
+        List<WorkoutDTO> threeGeneratedWorkouts = generateWorkouts(twoGeneratedUsers);
+        generateExercisesWithSets(threeGeneratedWorkouts);
     }
 
-    private void generateUsers() {
+    private List<UserDTO> generateUsers() {
         CreateUserCommand createUserCommand1 = new CreateUserCommand(
                 new Username("kowalski"),
                 UserGender.MALE,
@@ -51,27 +56,29 @@ public class OnLaunchTestDataGenerator implements ApplicationRunner {
                 new UserWeight(55.1),
                 new UserHeight(167)
         );
-        userService.addUser(createUserCommand1);
-        userService.addUser(createUserCommand2);
+        UserDTO user1 = userService.addUser(createUserCommand1);
+        UserDTO user2 = userService.addUser(createUserCommand2);
+        return List.of(user1, user2);
     }
 
-    private void generateWeightLogs() {
+    private List<WeightLogDTO> generateWeightLogs(List<UserDTO> twoGeneratedUsers) {
         CreateWeightLogCommand createWeightLogCommand1 = new CreateWeightLogCommand(
-                new UserId(0L),
+                new UserId(twoGeneratedUsers.get(0).id),
                 new WeightLogName("kowalski WeightLog"),
                 LocalDate.of(2023, 1, 1)
         );
         CreateWeightLogCommand createWeightLogCommand2 = new CreateWeightLogCommand(
-                new UserId(1L),
+                new UserId(twoGeneratedUsers.get(1).id),
                 new WeightLogName("nowacka WeightLog"),
                 LocalDate.of(2022, 12, 15)
         );
-        weightLogService.addWeightLog(createWeightLogCommand1);
-        weightLogService.addWeightLog(createWeightLogCommand2);
+        WeightLogDTO weightLog1 = weightLogService.addWeightLog(createWeightLogCommand1);
+        WeightLogDTO weightLog2 = weightLogService.addWeightLog(createWeightLogCommand2);
+        return List.of(weightLog1, weightLog2);
     }
 
-    private void generateWeightLogEntries() {
-        WeightLogId weightLogId1 = new WeightLogId(0L);
+    private void generateWeightLogEntries(List<WeightLogDTO> twoGeneratedWeightLogs) {
+        WeightLogId weightLogId1 = new WeightLogId(twoGeneratedWeightLogs.get(0).id);
         List<WeightLogEntry> entries1 = List.of(
                 new WeightLogEntry(new UserWeight(86.4), LocalDate.of(2023, 1, 2)),
                 new WeightLogEntry(new UserWeight(86.7), LocalDate.of(2023, 1, 4)),
@@ -85,7 +92,7 @@ public class OnLaunchTestDataGenerator implements ApplicationRunner {
 
         entries1.forEach(entry -> weightLogService.addWeightLogEntry(entry, weightLogId1));
 
-        WeightLogId weightLogId2 = new WeightLogId(1L);
+        WeightLogId weightLogId2 = new WeightLogId(twoGeneratedWeightLogs.get(1).id);
         List<WeightLogEntry> entries2 = List.of(
                 new WeightLogEntry(new UserWeight(61.1), LocalDate.of(2022, 12, 26)),
                 new WeightLogEntry(new UserWeight(61.1), LocalDate.of(2022, 12, 27)),
@@ -100,31 +107,34 @@ public class OnLaunchTestDataGenerator implements ApplicationRunner {
         entries2.forEach(entry -> weightLogService.addWeightLogEntry(entry, weightLogId2));
     }
 
-    private void generateWorkouts() {
+    private List<WorkoutDTO> generateWorkouts(List<UserDTO> twoGeneratedUsers) {
         CreateWorkoutCommand createWorkoutCommand1 = new CreateWorkoutCommand(
-                new UserId(0),
+                new UserId(twoGeneratedUsers.get(0).id),
                 LocalDate.of(2023, 1, 1),
                 false,
                 "first workout after 2 weeks break"
         );
         CreateWorkoutCommand createWorkoutCommand2 = new CreateWorkoutCommand(
-                new UserId(0),
+                new UserId(twoGeneratedUsers.get(0).id),
                 LocalDate.of(2023, 1, 4),
                 false,
                 ""
         );
         CreateWorkoutCommand createWorkoutCommand3 = new CreateWorkoutCommand(
-                new UserId(1),
+                new UserId(twoGeneratedUsers.get(1).id),
                 LocalDate.of(2022, 12, 28),
                 true,
                 "last deload workout, I've already felt quite fresh"
         );
 
-        List.of(createWorkoutCommand1, createWorkoutCommand2, createWorkoutCommand3).forEach(workoutService::addWorkout);
+        WorkoutDTO workout1 = workoutService.addWorkout(createWorkoutCommand1);
+        WorkoutDTO workout2 = workoutService.addWorkout(createWorkoutCommand2);
+        WorkoutDTO workout3 = workoutService.addWorkout(createWorkoutCommand3);
+        return List.of(workout1, workout2, workout3);
     }
 
-    private void generateExercisesWithSets() {
-        WorkoutId workoutId1 = new WorkoutId(0);
+    private void generateExercisesWithSets(List<WorkoutDTO> threeGeneratedWorkouts) {
+        WorkoutId workoutId1 = new WorkoutId(threeGeneratedWorkouts.get(0).id);
         CreateExerciseCommand createExerciseCommand1 = new CreateExerciseCommand(
                 List.of(
                         new ExerciseSet(1, 10, 100),
@@ -140,7 +150,7 @@ public class OnLaunchTestDataGenerator implements ApplicationRunner {
         );
         List.of(createExerciseCommand1, createExerciseCommand2).forEach(e -> workoutService.addExercise(e, workoutId1));
 
-        WorkoutId workoutId2 = new WorkoutId(1);
+        WorkoutId workoutId2 = new WorkoutId(threeGeneratedWorkouts.get(1).id);
         CreateExerciseCommand createExerciseCommand3 = new CreateExerciseCommand(
                 List.of(
                         new ExerciseSet(1, 5, 170),
@@ -151,7 +161,7 @@ public class OnLaunchTestDataGenerator implements ApplicationRunner {
         );
         List.of(createExerciseCommand3).forEach(e -> workoutService.addExercise(e, workoutId2));
 
-        WorkoutId workoutId3 = new WorkoutId(2);
+        WorkoutId workoutId3 = new WorkoutId(threeGeneratedWorkouts.get(2).id);
         CreateExerciseCommand createExerciseCommand4 = new CreateExerciseCommand(
                 List.of(
                         new ExerciseSet(1, 12, 60),

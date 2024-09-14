@@ -11,7 +11,10 @@ import com.github.bartcowski.gymkeeper.domain.weightlog.WeightLogId;
 import com.github.bartcowski.gymkeeper.domain.weightlog.WeightLogName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
+import org.springframework.boot.autoconfigure.jdbc.DataSourceAutoConfiguration;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.test.context.ActiveProfiles;
 
 import java.time.LocalDate;
 
@@ -19,6 +22,8 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 
 @SpringBootTest
+@ActiveProfiles("test")
+@EnableAutoConfiguration(exclude = { DataSourceAutoConfiguration.class })
 class WeightLogEntryAddedAndUserWeightUpdatedIntegrationTest {
 
     private final UserWeight initialUserWeight = new UserWeight(90.0);
@@ -49,7 +54,7 @@ class WeightLogEntryAddedAndUserWeightUpdatedIntegrationTest {
 
         //then: user is still present and their weight is updated
         assertNotNull(user);
-        assertEquals(updatedUserWeight.value(), user.weight);
+        assertEquals(updatedUserWeight.weight(), user.weight);
     }
 
     private WeightLogId addWeightLog(UserId userId) {

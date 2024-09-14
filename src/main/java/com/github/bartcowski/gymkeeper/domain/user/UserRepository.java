@@ -13,7 +13,7 @@ public interface UserRepository extends IdGeneratingRepository {
 
     Optional<User> findUserByName(Username username);
 
-    User addUser(CreateUserCommand command);
+    User addUser(User user);
 
     void deleteUser(UserId userId);
 

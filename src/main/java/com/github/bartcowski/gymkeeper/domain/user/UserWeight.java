@@ -1,9 +1,12 @@
 package com.github.bartcowski.gymkeeper.domain.user;
 
-public record UserWeight(double value) {
+import jakarta.persistence.Embeddable;
+
+@Embeddable
+public record UserWeight(double weight) {
 
     public UserWeight {
-        if (value <= 0 || value > 500) {
+        if (weight <= 0 || weight > 500) {
             throw new IllegalArgumentException("User weight must be between 1-500 kg");
         }
     }

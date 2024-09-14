@@ -34,8 +34,16 @@ public class UserService {
 
     @Transactional
     public UserDTO addUser(CreateUserCommand command) {
-        User user = userRepository.addUser(command);
-        return UserDTO.fromDomain(user);
+        long id = userRepository.nextIdentity();
+        User newUser = new User(
+                new UserId(id),
+                command.username(),
+                command.gender(),
+                command.age(),
+                command.weight(),
+                command.height());
+        userRepository.addUser(newUser);
+        return UserDTO.fromDomain(newUser);
     }
 
     @Transactional
@@ -43,10 +51,26 @@ public class UserService {
         userRepository.deleteUser(userId);
     }
 
+    //TODO: create endpoints for updates below
+
+    @Transactional
+    public void updateUserAge(UserId userId, UserAge age) {
+        User user = userRepository.findUserById(userId)
+                .orElseThrow(() -> new IllegalStateException("User's age cannot be updated because no user of id: " + userId.id() + " can be found"));
+        user.updateAge(age);
+    }
+
     @Transactional
     public void updateUserWeight(UserId userId, UserWeight weight) {
         User user = userRepository.findUserById(userId)
                 .orElseThrow(() -> new IllegalStateException("User's weight cannot be updated because no user of id: " + userId.id() + " can be found"));
         user.updateWeight(weight);
+    }
+
+    @Transactional
+    public void updateUserHeight(UserId userId, UserHeight height) {
+        User user = userRepository.findUserById(userId)
+                .orElseThrow(() -> new IllegalStateException("User's height cannot be updated because no user of id: " + userId.id() + " can be found"));
+        user.updateHeight(height);
     }
 }
