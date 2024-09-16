@@ -1,18 +1,11 @@
 package com.github.bartcowski.gymkeeper.domain.workout;
 
 import com.github.bartcowski.gymkeeper.domain.user.UserId;
-import lombok.EqualsAndHashCode;
-import lombok.Getter;
 
 import java.time.LocalDate;
-import java.util.ArrayList;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Optional;
+import java.util.*;
 import java.util.function.Function;
 
-@Getter
-@EqualsAndHashCode
 public class Workout {
 
     private final WorkoutId id;
@@ -45,6 +38,30 @@ public class Workout {
         this.comment = comment;
     }
 
+    public WorkoutId id() {
+        return id;
+    }
+
+    public UserId userId() {
+        return userId;
+    }
+
+    public List<Exercise> exercises() {
+        return exercises;
+    }
+
+    public LocalDate date() {
+        return date;
+    }
+
+    public boolean deload() {
+        return isDeload;
+    }
+
+    public String comment() {
+        return comment;
+    }
+
     public void updateWorkout(UpdateWorkoutCommand command) {
         this.date = command.date();
         this.isDeload = command.isDeload();
@@ -58,9 +75,9 @@ public class Workout {
 
     public void updateExercise(Exercise updatedExercise) {
         validateExerciseToAddOrUpdate(updatedExercise);
-        findExerciseById(updatedExercise.getId())
+        findExerciseById(updatedExercise.id())
                 .orElseThrow(() -> new IllegalStateException(
-                        "Exercise " + updatedExercise.getId().id() + " cannot be found in workout " + this.id))
+                        "Exercise " + updatedExercise.id().id() + " cannot be found in workout " + this.id))
                 .update(updatedExercise);
     }
 
@@ -70,7 +87,7 @@ public class Workout {
             if (exerciseToRemove != null) {
                 exercise.decrementIndex();
             }
-            if (exercise.getId().equals(exerciseId)) {
+            if (exercise.id().equals(exerciseId)) {
                 exerciseToRemove = exercise;
             }
         }
@@ -78,15 +95,15 @@ public class Workout {
     }
 
     private void validateExerciseToAddOrUpdate(Exercise exerciseToValidate) {
-        validateIfContainsDuplicates(exerciseToValidate.getSets(), ExerciseSet::getIndex);
+        validateIfContainsDuplicates(exerciseToValidate.sets(), ExerciseSet::index);
         for (Exercise e : exercises) {
-            if (e.getId().equals(exerciseToValidate.getId())) {
+            if (e.id().equals(exerciseToValidate.id())) {
                 continue;
             }
-            if (e.getExerciseType() == exerciseToValidate.getExerciseType()) {
+            if (e.exerciseType() == exerciseToValidate.exerciseType()) {
                 throw new IllegalStateException("Exercises within workout can't have duplicate types, failed update of workout " + this.id);
             }
-            if (e.getIndex() == exerciseToValidate.getIndex()) {
+            if (e.index() == exerciseToValidate.index()) {
                 throw new IllegalStateException("Exercises within workout can't have duplicate indexes, failed update of workout " + this.id);
             }
         }
@@ -94,7 +111,7 @@ public class Workout {
 
     private Optional<Exercise> findExerciseById(ExerciseId exerciseId) {
         return exercises.stream()
-                .filter(e -> e.getId().equals(exerciseId))
+                .filter(e -> e.id().equals(exerciseId))
                 .findFirst();
     }
 
@@ -104,5 +121,18 @@ public class Workout {
         if (mappedDistinctElements.size() < mappedElements.size()) {
             throw new IllegalStateException("Duplicate index found while trying to update exercises: " + elements);
         }
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        Workout workout = (Workout) o;
+        return Objects.equals(id, workout.id);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hashCode(id);
     }
 }

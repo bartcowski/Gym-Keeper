@@ -33,8 +33,8 @@ class WeightLogTest extends Specification {
         weightLog.addNewEntry(entry)
 
         then:
-        weightLog.entries.size() == 1
-        weightLog.entries.get(0).date() == date
+        weightLog.entries().size() == 1
+        weightLog.entries().get(0).date() == date
     }
 
     def "should delete entry when given valid date"() {
@@ -47,7 +47,7 @@ class WeightLogTest extends Specification {
         weightLog.deleteEntryFromDay(date)
 
         then:
-        weightLog.entries.size() == 0
+        weightLog.entries().size() == 0
     }
 
     def "should do nothing when trying to delete entry from a day that does not have any entry"() {
@@ -61,8 +61,8 @@ class WeightLogTest extends Specification {
         weightLog.deleteEntryFromDay(invalidDate)
 
         then:
-        weightLog.entries.size() == 1
-        weightLog.entries.contains(existingLogEntry)
+        weightLog.entries().size() == 1
+        weightLog.entries().contains(existingLogEntry)
     }
 
     def "should not add new entry and throw exception when #reason"() {
@@ -76,8 +76,8 @@ class WeightLogTest extends Specification {
 
         then:
         thrown(IllegalStateException.class)
-        weightLog.entries.size() == 1
-        weightLog.entries.get(0) == existingLogEntry
+        weightLog.entries().size() == 1
+        weightLog.entries().get(0) == existingLogEntry
 
         where:
         reason                                                          | newLogEntryDate

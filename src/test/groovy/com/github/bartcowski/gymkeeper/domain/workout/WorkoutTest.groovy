@@ -10,8 +10,8 @@ class WorkoutTest extends Specification {
     def "should update workout"() {
         given:
         def workout = createWorkoutWithExercises([])
-        def newDate = workout.getDate().plusDays(1)
-        def newIsDeload = !workout.isDeload()
+        def newDate = workout.date().plusDays(1)
+        def newIsDeload = !workout.deload()
         def newComment = "updated comment"
         def command = new UpdateWorkoutCommand(newDate, newIsDeload, newComment)
 
@@ -19,9 +19,9 @@ class WorkoutTest extends Specification {
         workout.updateWorkout(command)
 
         then:
-        workout.getDate() == newDate
-        workout.isDeload() == newIsDeload
-        workout.getComment() == newComment
+        workout.date() == newDate
+        workout.deload() == newIsDeload
+        workout.comment() == newComment
     }
 
     def "should add new exercise"() {

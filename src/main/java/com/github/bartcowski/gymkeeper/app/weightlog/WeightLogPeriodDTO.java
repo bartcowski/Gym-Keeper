@@ -25,13 +25,13 @@ public class WeightLogPeriodDTO {
 
     public static WeightLogPeriodDTO fromDomain(WeightLogPeriod weightLogPeriod) {
         return new WeightLogPeriodDTO(
-                weightLogPeriod.getEntries()
+                weightLogPeriod.entries()
                         .stream()
                         .map(WeightLogEntryDTO::fromDomain)
                         .collect(Collectors.toList()),
-                weightLogPeriod.getAverageWeight(),
-                weightLogPeriod.getStartDate(),
-                weightLogPeriod.getEndDate()
+                weightLogPeriod.averageWeight(),
+                weightLogPeriod.startDate(),
+                weightLogPeriod.endDate()
         );
     }
 

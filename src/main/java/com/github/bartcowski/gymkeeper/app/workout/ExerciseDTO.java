@@ -28,11 +28,11 @@ public class ExerciseDTO {
 
     public static ExerciseDTO fromDomain(Exercise exercise) {
         return new ExerciseDTO(
-                exercise.getId().id(),
-                exercise.getIndex(),
-                exercise.getExerciseType().name(),
-                exercise.getSets().stream().map(ExerciseSetDTO::fromDomain).toList(),
-                exercise.getComment()
+                exercise.id().id(),
+                exercise.index(),
+                exercise.exerciseType().name(),
+                exercise.sets().stream().map(ExerciseSetDTO::fromDomain).toList(),
+                exercise.comment()
         );
     }
 

@@ -30,12 +30,12 @@ public class WorkoutDTO {
 
     public static WorkoutDTO fromDomain(Workout workout) {
         return new WorkoutDTO(
-                workout.getId().id(),
-                workout.getUserId().id(),
-                workout.getExercises().stream().map(ExerciseDTO::fromDomain).toList(),
-                workout.getDate(),
-                workout.isDeload(),
-                workout.getComment()
+                workout.id().id(),
+                workout.userId().id(),
+                workout.exercises().stream().map(ExerciseDTO::fromDomain).toList(),
+                workout.date(),
+                workout.deload(),
+                workout.comment()
         );
     }
 }

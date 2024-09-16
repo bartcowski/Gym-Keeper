@@ -5,7 +5,6 @@ import com.github.bartcowski.gymkeeper.domain.user.UserId;
 import com.github.bartcowski.gymkeeper.domain.workout.ExerciseId;
 import com.github.bartcowski.gymkeeper.domain.workout.UpdateWorkoutCommand;
 import com.github.bartcowski.gymkeeper.domain.workout.WorkoutId;
-import lombok.AllArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -14,10 +13,13 @@ import java.util.List;
 
 @RestController
 @RequestMapping("/api/workouts")
-@AllArgsConstructor
 public class WorkoutResource {
 
     private final WorkoutService workoutService;
+
+    public WorkoutResource(WorkoutService workoutService) {
+        this.workoutService = workoutService;
+    }
 
     @GetMapping("/search")
     public ResponseEntity<List<WorkoutDTO>> getAllWorkoutsForUser(@RequestParam long userId) {

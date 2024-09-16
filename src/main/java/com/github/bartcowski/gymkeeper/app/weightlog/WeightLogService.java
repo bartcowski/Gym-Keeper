@@ -4,7 +4,6 @@ import com.github.bartcowski.gymkeeper.domain.event.DomainEventPublisher;
 import com.github.bartcowski.gymkeeper.domain.event.WeightLogEntryAdded;
 import com.github.bartcowski.gymkeeper.domain.user.UserId;
 import com.github.bartcowski.gymkeeper.domain.weightlog.*;
-import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -13,12 +12,16 @@ import java.util.List;
 import java.util.Optional;
 
 @Service
-@AllArgsConstructor
 public class WeightLogService {
 
     private final WeightLogRepository weightLogRepository;
 
     private final DomainEventPublisher eventPublisher;
+
+    public WeightLogService(WeightLogRepository weightLogRepository, DomainEventPublisher eventPublisher) {
+        this.weightLogRepository = weightLogRepository;
+        this.eventPublisher = eventPublisher;
+    }
 
     @Transactional(readOnly = true)
     public List<WeightLogDTO> findAllUsersWeightLogs(UserId userId) {

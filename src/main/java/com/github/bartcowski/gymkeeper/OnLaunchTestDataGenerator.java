@@ -12,7 +12,6 @@ import com.github.bartcowski.gymkeeper.domain.weightlog.WeightLogEntry;
 import com.github.bartcowski.gymkeeper.domain.weightlog.WeightLogId;
 import com.github.bartcowski.gymkeeper.domain.weightlog.WeightLogName;
 import com.github.bartcowski.gymkeeper.domain.workout.*;
-import lombok.AllArgsConstructor;
 import org.springframework.boot.ApplicationArguments;
 import org.springframework.boot.ApplicationRunner;
 import org.springframework.context.annotation.Profile;
@@ -22,7 +21,6 @@ import java.time.LocalDate;
 import java.util.List;
 
 @Component
-@AllArgsConstructor
 @Profile("prod")
 public class OnLaunchTestDataGenerator implements ApplicationRunner {
 
@@ -31,6 +29,12 @@ public class OnLaunchTestDataGenerator implements ApplicationRunner {
     private final WeightLogService weightLogService;
 
     private final WorkoutService workoutService;
+
+    public OnLaunchTestDataGenerator(UserService userService, WeightLogService weightLogService, WorkoutService workoutService) {
+        this.userService = userService;
+        this.weightLogService = weightLogService;
+        this.workoutService = workoutService;
+    }
 
     @Override
     public void run(ApplicationArguments args) {

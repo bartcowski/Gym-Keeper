@@ -6,7 +6,6 @@ import com.github.bartcowski.gymkeeper.domain.user.CreateUserCommand;
 import com.github.bartcowski.gymkeeper.domain.user.UserId;
 import com.github.bartcowski.gymkeeper.domain.user.Username;
 import jakarta.websocket.server.PathParam;
-import lombok.AllArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -16,12 +15,16 @@ import java.util.Optional;
 
 @RestController
 @RequestMapping("/api/users")
-@AllArgsConstructor
 public class UserResource {
 
     private final UserService userService;
 
     private final UserIndexesProvider userIndexesProvider;
+
+    public UserResource(UserService userService, UserIndexesProvider userIndexesProvider) {
+        this.userService = userService;
+        this.userIndexesProvider = userIndexesProvider;
+    }
 
     @GetMapping
     public ResponseEntity<List<UserDTO>> getAllUsers() {

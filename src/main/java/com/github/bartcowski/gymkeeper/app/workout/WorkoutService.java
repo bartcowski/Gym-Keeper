@@ -2,17 +2,19 @@ package com.github.bartcowski.gymkeeper.app.workout;
 
 import com.github.bartcowski.gymkeeper.domain.user.UserId;
 import com.github.bartcowski.gymkeeper.domain.workout.*;
-import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 
 @Service
-@AllArgsConstructor
 public class WorkoutService {
 
     private final WorkoutRepository workoutRepository;
+
+    public WorkoutService(WorkoutRepository workoutRepository) {
+        this.workoutRepository = workoutRepository;
+    }
 
     @Transactional(readOnly = true)
     public List<WorkoutDTO> findAllUsersWorkouts(UserId userId) {

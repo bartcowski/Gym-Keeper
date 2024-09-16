@@ -23,7 +23,7 @@ public class InMemoryWorkoutRepository implements WorkoutRepository {
     public List<Workout> findAllUsersWorkouts(UserId userId) {
         return workoutsMap.values()
                 .stream()
-                .filter(workout -> workout.getUserId().equals(userId))
+                .filter(workout -> workout.userId().equals(userId))
                 .toList();
     }
 
@@ -41,7 +41,7 @@ public class InMemoryWorkoutRepository implements WorkoutRepository {
                 command.isDeload(),
                 command.comment()
         );
-        workoutsMap.put(workout.getId(), workout);
+        workoutsMap.put(workout.id(), workout);
         return workout;
     }
 

@@ -19,9 +19,9 @@ public class ExerciseSetDTO {
 
     public static ExerciseSetDTO fromDomain(ExerciseSet exerciseSet) {
         return new ExerciseSetDTO(
-                exerciseSet.getIndex(),
-                exerciseSet.getReps(),
-                DoubleUtil.roundDoubleToTwoDecimalPlaces(exerciseSet.getWeight())
+                exerciseSet.index(),
+                exerciseSet.reps(),
+                DoubleUtil.roundDoubleToTwoDecimalPlaces(exerciseSet.weight())
         );
     }
 

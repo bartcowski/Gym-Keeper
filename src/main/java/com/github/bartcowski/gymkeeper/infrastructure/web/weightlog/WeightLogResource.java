@@ -5,7 +5,6 @@ import com.github.bartcowski.gymkeeper.domain.user.UserId;
 import com.github.bartcowski.gymkeeper.domain.weightlog.CreateWeightLogCommand;
 import com.github.bartcowski.gymkeeper.domain.weightlog.WeightLogId;
 import com.github.bartcowski.gymkeeper.domain.weightlog.WeightLogName;
-import lombok.AllArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -15,10 +14,13 @@ import java.util.Optional;
 
 @RestController
 @RequestMapping("/api/weightlogs")
-@AllArgsConstructor
 public class WeightLogResource {
 
     private final WeightLogService weightLogService;
+
+    public WeightLogResource(WeightLogService weightLogService) {
+        this.weightLogService = weightLogService;
+    }
 
     @GetMapping("/search")
     public ResponseEntity<List<WeightLogDTO>> getAllUsersWeightLogs(@RequestParam long userId) {

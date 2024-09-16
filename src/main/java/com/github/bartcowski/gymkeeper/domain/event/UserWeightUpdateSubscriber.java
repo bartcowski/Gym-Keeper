@@ -1,18 +1,20 @@
 package com.github.bartcowski.gymkeeper.domain.event;
 
 import com.github.bartcowski.gymkeeper.app.user.UserService;
-import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 
 @Service
-@AllArgsConstructor
-public class UserWeightUpdateSubscriber implements DomainEventSubscriber<WeightLogEntryAdded>{
+public class UserWeightUpdateSubscriber implements DomainEventSubscriber<WeightLogEntryAdded> {
 
     private final UserService userService;
 
+    public UserWeightUpdateSubscriber(UserService userService) {
+        this.userService = userService;
+    }
+
     @Override
     public void handleEvent(WeightLogEntryAdded event) {
-        userService.updateUserWeight(event.getUserId(), event.getWeight());
+        userService.updateUserWeight(event.userId(), event.weight());
     }
 
     @Override
