@@ -7,6 +7,6 @@ import java.time.LocalDate;
 public record CreateWorkoutCommand(
         UserId userId,
         LocalDate date,
-        boolean isDeload,
+        boolean deload,
         String comment) {
 }

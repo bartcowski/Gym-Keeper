@@ -4,6 +4,6 @@ import java.time.LocalDate;
 
 public record UpdateWorkoutCommand(
         LocalDate date,
-        boolean isDeload,
+        boolean deload,
         String comment) {
 }

@@ -11,7 +11,7 @@ public class CreateWorkoutCommandDTO {
 
     public LocalDate date;
 
-    public boolean isDeload;
+    public boolean deload;
 
     public String comment;
 
@@ -19,7 +19,7 @@ public class CreateWorkoutCommandDTO {
         return new CreateWorkoutCommand(
                 new UserId(userId),
                 date,
-                isDeload,
+                deload,
                 comment
         );
     }

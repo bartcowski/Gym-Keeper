@@ -35,7 +35,7 @@ class WorkoutTest extends Specification {
                 new Exercise(new ExerciseId(456), 2, ExerciseType.BARBELL_BENCH_PRESS, []))
 
         then:
-        workout.exercises.size() == 2
+        workout.exercises().size() == 2
     }
 
     def "should not allow to add exercise if any existing has the same type or index"() {
@@ -49,7 +49,7 @@ class WorkoutTest extends Specification {
 
         then:
         thrown(IllegalStateException.class)
-        workout.exercises.size() == 1
+        workout.exercises().size() == 1
 
         where:
         newInvalidExercise << [
@@ -69,7 +69,7 @@ class WorkoutTest extends Specification {
 
         then:
         thrown(IllegalStateException.class)
-        workout.exercises.size() == 0
+        workout.exercises().size() == 0
     }
 
     def "should update exercise and its sets"() {
@@ -87,10 +87,10 @@ class WorkoutTest extends Specification {
                 ]))
 
         then:
-        workout.exercises.size() == 1
-        workout.exercises[0].exerciseType == ExerciseType.BARBELL_BENCH_PRESS
-        workout.exercises[0].sets[0].reps == 10
-        workout.exercises[0].sets[0].weight == 50
+        workout.exercises().size() == 1
+        workout.exercises()[0].exerciseType() == ExerciseType.BARBELL_BENCH_PRESS
+        workout.exercises()[0].sets()[0].reps() == 10
+        workout.exercises()[0].sets()[0].weight() == 50
     }
 
     def "should not allow to update exercise if any existing has the same type or index"() {
@@ -105,9 +105,9 @@ class WorkoutTest extends Specification {
 
         then:
         thrown(IllegalStateException.class)
-        workout.exercises.size() == 2
-        workout.exercises[0].exerciseType == ExerciseType.SQUAT
-        workout.exercises[1].exerciseType == ExerciseType.DEADLIFT
+        workout.exercises().size() == 2
+        workout.exercises()[0].exerciseType() == ExerciseType.SQUAT
+        workout.exercises()[1].exerciseType() == ExerciseType.DEADLIFT
 
         where:
         updatedInvalidExercise << [
@@ -133,10 +133,10 @@ class WorkoutTest extends Specification {
 
         then:
         thrown(IllegalStateException.class)
-        workout.exercises.size() == 1
-        workout.exercises[0].sets.size() == 1
-        workout.exercises[0].sets[0].reps == 5
-        workout.exercises[0].sets[0].weight == 100
+        workout.exercises().size() == 1
+        workout.exercises()[0].sets().size() == 1
+        workout.exercises()[0].sets()[0].reps() == 5
+        workout.exercises()[0].sets()[0].weight() == 100
     }
 
     def "should remove exercise of given ID and decrement indexes of all following exercises"() {
@@ -153,13 +153,13 @@ class WorkoutTest extends Specification {
         workout.deleteExercise(exerciseIdToDelete)
 
         then:
-        workout.exercises.size() == 3
-        workout.exercises[0].exerciseType == ExerciseType.SQUAT
-        workout.exercises[0].index == 1
-        workout.exercises[1].exerciseType == ExerciseType.PULL_UP
-        workout.exercises[1].index == 2
-        workout.exercises[2].exerciseType == ExerciseType.DUMBBELL_CHEST_FLY
-        workout.exercises[2].index == 3
+        workout.exercises().size() == 3
+        workout.exercises()[0].exerciseType() == ExerciseType.SQUAT
+        workout.exercises()[0].index() == 1
+        workout.exercises()[1].exerciseType() == ExerciseType.PULL_UP
+        workout.exercises()[1].index() == 2
+        workout.exercises()[2].exerciseType() == ExerciseType.DUMBBELL_CHEST_FLY
+        workout.exercises()[2].index() == 3
     }
 
     private static Workout createWorkoutWithExercises(List<Exercise> exercises) {

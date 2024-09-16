@@ -15,16 +15,16 @@ public class WorkoutDTO {
 
     public LocalDate date;
 
-    public boolean isDeload;
+    public boolean deload;
 
     public String comment;
 
-    public WorkoutDTO(long id, long userId, List<ExerciseDTO> exercises, LocalDate date, boolean isDeload, String comment) {
+    public WorkoutDTO(long id, long userId, List<ExerciseDTO> exercises, LocalDate date, boolean deload, String comment) {
         this.id = id;
         this.userId = userId;
         this.exercises = exercises;
         this.date = date;
-        this.isDeload = isDeload;
+        this.deload = deload;
         this.comment = comment;
     }
 

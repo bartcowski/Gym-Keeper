@@ -1,41 +1,53 @@
 package com.github.bartcowski.gymkeeper.domain.workout;
 
 import com.github.bartcowski.gymkeeper.domain.user.UserId;
+import jakarta.persistence.*;
 
 import java.time.LocalDate;
 import java.util.*;
 import java.util.function.Function;
 
+@Entity
+@Table(name = "workout")
 public class Workout {
 
-    private final WorkoutId id;
+    @EmbeddedId
+    private WorkoutId id;
 
-    private final UserId userId;
+    @Embedded
+    @AttributeOverride(name = "id", column = @Column(name = "user_id"))
+    private UserId userId;
 
-    private final List<Exercise> exercises;
+    @OneToMany(cascade = CascadeType.ALL, orphanRemoval = true)
+    @JoinColumn(name = "workout_id")
+    private List<Exercise> exercises;
 
     private LocalDate date;
 
-    private boolean isDeload;
+    private boolean deload;
 
     private String comment;
 
-    public Workout(WorkoutId id, UserId userId, List<Exercise> exercises, LocalDate date, boolean isDeload, String comment) {
+    public Workout(WorkoutId id, UserId userId, List<Exercise> exercises, LocalDate date, boolean deload, String comment) {
         this.id = id;
         this.userId = userId;
         this.exercises = exercises; //TODO: some validation?
         this.date = date;
-        this.isDeload = isDeload;
+        this.deload = deload;
         this.comment = comment;
     }
 
-    public Workout(WorkoutId id, UserId userId, LocalDate date, boolean isDeload, String comment) {
+    public Workout(WorkoutId id, UserId userId, LocalDate date, boolean deload, String comment) {
         this.id = id;
         this.userId = userId;
         this.exercises = new ArrayList<>();
         this.date = date;
-        this.isDeload = isDeload;
+        this.deload = deload;
         this.comment = comment;
+    }
+
+    protected Workout() {
+        //persistence
     }
 
     public WorkoutId id() {
@@ -55,7 +67,7 @@ public class Workout {
     }
 
     public boolean deload() {
-        return isDeload;
+        return deload;
     }
 
     public String comment() {
@@ -64,7 +76,7 @@ public class Workout {
 
     public void updateWorkout(UpdateWorkoutCommand command) {
         this.date = command.date();
-        this.isDeload = command.isDeload();
+        this.deload = command.deload();
         this.comment = command.comment();
     }
 

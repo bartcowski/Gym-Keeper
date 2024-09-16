@@ -1,5 +1,8 @@
 package com.github.bartcowski.gymkeeper.domain.workout;
 
+import jakarta.persistence.Embeddable;
+
+@Embeddable
 public record ExerciseSet(int index, int reps, double weight) {
 
     public ExerciseSet {

@@ -12,7 +12,7 @@ public interface WorkoutRepository extends IdGeneratingRepository {
 
     Optional<Workout> findWorkoutById(WorkoutId workoutId);
 
-    Workout addWorkout(CreateWorkoutCommand command);
+    Workout addWorkout(Workout workout);
 
     void deleteWorkout(WorkoutId workoutId);
 

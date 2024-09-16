@@ -1,16 +1,24 @@
 package com.github.bartcowski.gymkeeper.domain.workout;
 
+import jakarta.persistence.*;
+
 import java.util.List;
 import java.util.Objects;
 
+@Entity
+@Table(name = "exercise")
 public class Exercise {
 
-    private final ExerciseId id;
+    @EmbeddedId
+    private ExerciseId id;
 
     private int index;
 
+    @Enumerated(EnumType.STRING)
     private ExerciseType exerciseType;
 
+    @ElementCollection
+    @CollectionTable(name = "exercise_set", joinColumns = @JoinColumn(name = "exercise_id"))
     private List<ExerciseSet> sets;
 
     private String comment;
@@ -25,6 +33,10 @@ public class Exercise {
 
     public Exercise(ExerciseId id, int index, ExerciseType exerciseType, List<ExerciseSet> sets) {
         this(id, index, exerciseType, sets, "");
+    }
+
+    protected Exercise() {
+        //persistence
     }
 
     public ExerciseId id() {

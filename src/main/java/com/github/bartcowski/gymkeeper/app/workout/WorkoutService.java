@@ -34,7 +34,15 @@ public class WorkoutService {
 
     @Transactional
     public WorkoutDTO addWorkout(CreateWorkoutCommand command) {
-        Workout createdWorkout = workoutRepository.addWorkout(command);
+        long id = workoutRepository.nextIdentity();
+        Workout workout = new Workout(
+                new WorkoutId(id),
+                command.userId(),
+                command.date(),
+                command.deload(),
+                command.comment()
+        );
+        Workout createdWorkout = workoutRepository.addWorkout(workout);
         return WorkoutDTO.fromDomain(createdWorkout);
     }
 
