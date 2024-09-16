@@ -40,27 +40,27 @@ public class User {
         //persistence
     }
 
-    public UserId getId() {
+    public UserId id() {
         return id;
     }
 
-    public Username getUsername() {
+    public Username username() {
         return username;
     }
 
-    public UserGender getGender() {
+    public UserGender gender() {
         return gender;
     }
 
-    public UserAge getAge() {
+    public UserAge age() {
         return age;
     }
 
-    public UserWeight getWeight() {
+    public UserWeight weight() {
         return weight;
     }
 
-    public UserHeight getHeight() {
+    public UserHeight height() {
         return height;
     }
 
@@ -94,11 +94,11 @@ public class User {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         User user = (User) o;
-        return Objects.equals(id, user.id) && Objects.equals(username, user.username) && gender == user.gender && Objects.equals(age, user.age) && Objects.equals(weight, user.weight) && Objects.equals(height, user.height);
+        return Objects.equals(id, user.id);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(id, username, gender, age, weight, height);
+        return Objects.hashCode(id);
     }
 }

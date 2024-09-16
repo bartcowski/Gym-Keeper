@@ -27,11 +27,11 @@ public class WeightLogDTO {
 
     public static WeightLogDTO fromDomain(WeightLog domainWeightLog) {
         return new WeightLogDTO(
-                domainWeightLog.getId().id(),
-                domainWeightLog.getUserId().id(),
-                domainWeightLog.getStartDate(),
-                domainWeightLog.getEntries().stream().map(WeightLogEntryDTO::fromDomain).toList(),
-                domainWeightLog.getName().name()
+                domainWeightLog.id().id(),
+                domainWeightLog.userId().id(),
+                domainWeightLog.startDate(),
+                domainWeightLog.entries().stream().map(WeightLogEntryDTO::fromDomain).toList(),
+                domainWeightLog.name().name()
         );
     }
 

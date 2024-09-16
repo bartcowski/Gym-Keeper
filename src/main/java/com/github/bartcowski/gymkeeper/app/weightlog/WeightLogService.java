@@ -35,7 +35,14 @@ public class WeightLogService {
 
     @Transactional
     public WeightLogDTO addWeightLog(CreateWeightLogCommand command) {
-        WeightLog weightLog = weightLogRepository.addWeightLog(command);
+        long id = weightLogRepository.nextIdentity();
+        WeightLog newWeightLog = new WeightLog(
+                new WeightLogId(id),
+                command.userId(),
+                command.name(),
+                command.startDate()
+        );
+        WeightLog weightLog = weightLogRepository.addWeightLog(newWeightLog);
         return WeightLogDTO.fromDomain(weightLog);
     }
 

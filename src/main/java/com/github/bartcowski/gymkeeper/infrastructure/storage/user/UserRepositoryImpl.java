@@ -16,7 +16,7 @@ public class UserRepositoryImpl implements UserRepository {
 
     private final JpaUserRepository jpaUserRepository;
 
-    public UserRepositoryImpl(JpaUserRepository jpaUserRepository) {
+    UserRepositoryImpl(JpaUserRepository jpaUserRepository) {
         this.jpaUserRepository = jpaUserRepository;
     }
 

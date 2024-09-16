@@ -27,12 +27,12 @@ public class UserDTO {
 
     public static UserDTO fromDomain(User user) {
         return new UserDTO(
-                user.getId().id(),
-                user.getUsername().username(),
-                user.getGender().toString(),
-                user.getAge().age(),
-                user.getWeight().weight(),
-                user.getHeight().height()
+                user.id().id(),
+                user.username().username(),
+                user.gender().toString(),
+                user.age().age(),
+                user.weight().weight(),
+                user.height().height()
         );
     }
 }

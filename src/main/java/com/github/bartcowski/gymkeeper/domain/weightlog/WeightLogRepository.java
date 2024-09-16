@@ -12,7 +12,7 @@ public interface WeightLogRepository extends IdGeneratingRepository {
 
     Optional<WeightLog> findWeightLogById(WeightLogId weightLogId);
 
-    WeightLog addWeightLog(CreateWeightLogCommand command);
+    WeightLog addWeightLog(WeightLog weightLog);
 
     void deleteWeightLog(WeightLogId weightLogId);
 

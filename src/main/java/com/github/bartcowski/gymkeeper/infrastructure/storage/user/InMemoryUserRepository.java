@@ -28,13 +28,13 @@ public class InMemoryUserRepository implements UserRepository {
     @Override
     public Optional<User> findUserByName(Username username) {
         return usersMap.values().stream()
-                .filter(user -> user.getUsername().equals(username))
+                .filter(user -> user.username().equals(username))
                 .findFirst();
     }
 
     @Override
     public User addUser(User user) {
-        usersMap.put(user.getId(), user);
+        usersMap.put(user.id(), user);
         return user;
     }
 
@@ -42,5 +42,4 @@ public class InMemoryUserRepository implements UserRepository {
     public void deleteUser(UserId userId) {
         usersMap.remove(userId);
     }
-
 }

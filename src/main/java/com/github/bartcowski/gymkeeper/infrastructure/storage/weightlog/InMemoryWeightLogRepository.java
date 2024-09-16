@@ -1,21 +1,20 @@
-package com.github.bartcowski.gymkeeper.infrastructure.storage;
+package com.github.bartcowski.gymkeeper.infrastructure.storage.weightlog;
 
 import com.github.bartcowski.gymkeeper.domain.user.UserId;
-import com.github.bartcowski.gymkeeper.domain.weightlog.CreateWeightLogCommand;
 import com.github.bartcowski.gymkeeper.domain.weightlog.WeightLog;
 import com.github.bartcowski.gymkeeper.domain.weightlog.WeightLogId;
 import com.github.bartcowski.gymkeeper.domain.weightlog.WeightLogRepository;
-import org.springframework.stereotype.Service;
+import org.springframework.context.annotation.Profile;
+import org.springframework.stereotype.Repository;
 
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 
-@Service
+@Repository
+@Profile("test")
 public class InMemoryWeightLogRepository implements WeightLogRepository {
-
-    private static long weightLogIdCounter = 0;
 
     private final Map<WeightLogId, WeightLog> weightLogsMap = new HashMap<>();
 
@@ -23,7 +22,7 @@ public class InMemoryWeightLogRepository implements WeightLogRepository {
     public List<WeightLog> findAllUsersWeightLogs(UserId userId) {
         return weightLogsMap.values()
                 .stream()
-                .filter(weightLog -> weightLog.getUserId().equals(userId))
+                .filter(weightLog -> weightLog.userId().equals(userId))
                 .toList();
     }
 
@@ -33,20 +32,13 @@ public class InMemoryWeightLogRepository implements WeightLogRepository {
     }
 
     @Override
-    public WeightLog addWeightLog(CreateWeightLogCommand command) {
-        WeightLog newWeightLog = new WeightLog(
-                new WeightLogId(weightLogIdCounter++),
-                command.userId(),
-                command.name(),
-                command.startDate()
-        );
-        weightLogsMap.put(newWeightLog.getId(), newWeightLog);
-        return newWeightLog;
+    public WeightLog addWeightLog(WeightLog weightLog) {
+        weightLogsMap.put(weightLog.id(), weightLog);
+        return weightLog;
     }
 
     @Override
     public void deleteWeightLog(WeightLogId weightLogId) {
         weightLogsMap.remove(weightLogId);
     }
-
 }

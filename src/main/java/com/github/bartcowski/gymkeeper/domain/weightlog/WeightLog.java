@@ -2,26 +2,32 @@ package com.github.bartcowski.gymkeeper.domain.weightlog;
 
 import com.github.bartcowski.gymkeeper.domain.event.WeightLogEntryAdded;
 import com.github.bartcowski.gymkeeper.domain.user.UserId;
-import lombok.EqualsAndHashCode;
-import lombok.Getter;
+import jakarta.persistence.*;
 
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.List;
+import java.util.Objects;
 
-@Getter
-@EqualsAndHashCode
+@Entity
+@Table(name = "weight_log")
 public class WeightLog {
 
-    private final WeightLogId id;
+    @EmbeddedId
+    private WeightLogId id;
 
-    private final UserId userId;
+    @Embedded
+    @AttributeOverride(name = "id", column = @Column(name = "user_id"))
+    private UserId userId;
 
-    private final LocalDate startDate;
+    private LocalDate startDate;
 
-    private final List<WeightLogEntry> entries;
+    @ElementCollection
+    @CollectionTable(name = "weight_log_entry", joinColumns = @JoinColumn(name = "weight_log_id"))
+    private List<WeightLogEntry> entries;
 
+    @Embedded
     private WeightLogName name;
 
     public WeightLog(WeightLogId id, UserId userId, WeightLogName name, LocalDate startDate, List<WeightLogEntry> entries) {
@@ -38,6 +44,30 @@ public class WeightLog {
         this.name = name;
         this.startDate = startDate;
         this.entries = new ArrayList<>();
+    }
+
+    protected WeightLog() {
+        //persistence
+    }
+
+    public WeightLogId id() {
+        return id;
+    }
+
+    public UserId userId() {
+        return userId;
+    }
+
+    public LocalDate startDate() {
+        return startDate;
+    }
+
+    public List<WeightLogEntry> entries() {
+        return entries;
+    }
+
+    public WeightLogName name() {
+        return name;
     }
 
     public LocalDate getEndDate() {
@@ -119,4 +149,16 @@ public class WeightLog {
         return date.isBefore(startDate);
     }
 
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        WeightLog weightLog = (WeightLog) o;
+        return Objects.equals(id, weightLog.id);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hashCode(id);
+    }
 }
