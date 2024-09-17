@@ -79,4 +79,10 @@ public class UserResource {
         return ResponseEntity.ok().build();
     }
 
+    @PutMapping("/{userId}")
+    public ResponseEntity<UserDTO> updateUserData(@PathVariable long userId, @RequestBody UpdateUserDataCommandDTO updateUserDataCommandDTO) {
+        UserDTO userDTO = userService.updateUserData(new UserId(userId), updateUserDataCommandDTO.toDomain());
+        return ResponseEntity.ok(userDTO);
+    }
+
 }

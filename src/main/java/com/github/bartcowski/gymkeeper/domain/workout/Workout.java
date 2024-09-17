@@ -28,6 +28,9 @@ public class Workout {
 
     private String comment;
 
+    @Version
+    private int version;
+
     public Workout(WorkoutId id, UserId userId, List<Exercise> exercises, LocalDate date, boolean deload, String comment) {
         this.id = id;
         this.userId = userId;
@@ -35,15 +38,11 @@ public class Workout {
         this.date = date;
         this.deload = deload;
         this.comment = comment;
+        this.version = 1;
     }
 
     public Workout(WorkoutId id, UserId userId, LocalDate date, boolean deload, String comment) {
-        this.id = id;
-        this.userId = userId;
-        this.exercises = new ArrayList<>();
-        this.date = date;
-        this.deload = deload;
-        this.comment = comment;
+        this(id, userId, new ArrayList<>(), date, deload, comment);
     }
 
     protected Workout() {

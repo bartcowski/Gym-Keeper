@@ -23,12 +23,16 @@ public class Exercise {
 
     private String comment;
 
+    @Version
+    private int version;
+
     public Exercise(ExerciseId id, int index, ExerciseType exerciseType, List<ExerciseSet> sets, String comment) {
         this.id = id;
         this.index = index;
         this.exerciseType = exerciseType;
         this.sets = sets;
         this.comment = comment;
+        this.version = 1;
     }
 
     public Exercise(ExerciseId id, int index, ExerciseType exerciseType, List<ExerciseSet> sets) {

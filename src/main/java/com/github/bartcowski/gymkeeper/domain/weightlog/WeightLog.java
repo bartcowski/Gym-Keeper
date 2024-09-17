@@ -30,20 +30,20 @@ public class WeightLog {
     @Embedded
     private WeightLogName name;
 
+    @Version
+    private int version;
+
     public WeightLog(WeightLogId id, UserId userId, WeightLogName name, LocalDate startDate, List<WeightLogEntry> entries) {
         this.id = id;
         this.userId = userId;
         this.name = name;
         this.startDate = startDate;
         this.entries = entries;
+        this.version = 1;
     }
 
     public WeightLog(WeightLogId id, UserId userId, WeightLogName name, LocalDate startDate) {
-        this.id = id;
-        this.userId = userId;
-        this.name = name;
-        this.startDate = startDate;
-        this.entries = new ArrayList<>();
+        this(id, userId, name, startDate, new ArrayList<>());
     }
 
     protected WeightLog() {

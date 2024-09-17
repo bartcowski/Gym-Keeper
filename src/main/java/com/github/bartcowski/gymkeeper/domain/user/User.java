@@ -27,6 +27,9 @@ public class User {
     @Embedded
     private UserHeight height;
 
+    @Version
+    private int version;
+
     public User(UserId id, Username username, UserGender gender, UserAge age, UserWeight weight, UserHeight height) {
         this.id = id;
         this.username = username;
@@ -34,6 +37,7 @@ public class User {
         this.age = age;
         this.weight = weight;
         this.height = height;
+        this.version = 1;
     }
 
     protected User() {
