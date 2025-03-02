@@ -1,6 +1,8 @@
-package com.github.bartcowski.gymkeeper.domain.event;
+package com.github.bartcowski.gymkeeper.app.event;
 
 import com.github.bartcowski.gymkeeper.app.user.UserService;
+import com.github.bartcowski.gymkeeper.domain.event.DomainEventSubscriber;
+import com.github.bartcowski.gymkeeper.domain.event.WeightLogEntryAdded;
 import org.springframework.stereotype.Service;
 
 @Service
